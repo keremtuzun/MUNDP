@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MUNDP — Digital Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --blue:    #0356F0;
+      --blue2:   #0245c8;
+      --bg:      #09101f;
+      --surface: #111827;
+      --surface2:#1a2438;
+      --border:  #1e2e4a;
+      --text:    #f0f4ff;
+      --muted:   #5a6b8a;
+      --green:   #10b981;
+      --red:     #ef4444;
+      --gold:    #f59e0b;
+      --radius:  10px;
+      --font:    'Manrope', system-ui, sans-serif;
+      --hero: url('https://cdn.prod.website-files.com/66a3ed7fba757f6818a563b5/66bd01cffd6af77e67d98525_SFV_5848%20(1).jpg');
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+    /* ─── FORM PRIMITIVES ─── */
+    .form-group { margin-bottom: .9rem; }
+    label { display: block; font-size: .7rem; color: var(--muted); margin-bottom: .3rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    input, textarea, select {
+      width: 100%; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 7px; color: var(--text); padding: .58rem .85rem;
+      font-size: .875rem; font-family: var(--font); transition: border-color .15s;
+    }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--blue); }
+    textarea { resize: vertical; min-height: 80px; }
+    .err-box { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); color: #f87171; border-radius: 7px; padding: .6rem .85rem; font-size: .82rem; margin-bottom: .9rem; display: none; }
+    .err-box.show { display: block; }
+    .ok-box  { background: rgba(16,185,129,.12); border: 1px solid rgba(16,185,129,.35); color: #34d399; border-radius: 7px; padding: .75rem .85rem; font-size: .84rem; margin-bottom: .9rem; display: none; font-weight: 600; }
+    .ok-box.show  { display: block; }
+
+    /* ─── LOGIN SCREEN ─── */
+    #login-screen { min-height: 100vh; display: flex; }
+    .login-hero {
+      flex: 1; background: var(--hero) center/cover no-repeat;
+      position: relative; display: flex; flex-direction: column;
+      justify-content: flex-end; padding: 3rem;
+    }
+    .login-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(3,86,240,.3) 0%, rgba(0,0,0,.75) 100%);
+    }
+    .hero-quote { position: relative; z-index: 1; }
+    .hero-quote p { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 600; color: #fff; line-height: 1.3; max-width: 420px; margin-bottom: .6rem; }
+    .hero-quote span { font-size: .8rem; color: rgba(255,255,255,.55); letter-spacing: .07em; text-transform: uppercase; }
+    .login-panel { width: 480px; min-width: 420px; background: var(--surface); display: flex; flex-direction: column; border-left: 1px solid var(--border); overflow-y: auto; }
+    .login-panel-inner { padding: 2.75rem 2.5rem; display: flex; flex-direction: column; min-height: 100%; }
+    @media(max-width:768px){ .login-hero{display:none;} .login-panel{width:100%;min-width:0;border:none;} }
+
+    .login-logo { display: flex; align-items: center; gap: .7rem; margin-bottom: 2.5rem; text-decoration: none; }
+    .login-logo img { height: 40px; }
+    .login-logo-text { font-size: 1rem; font-weight: 800; color: var(--text); }
+    .login-logo-sub  { font-size: .68rem; color: var(--muted); font-weight: 500; }
+
+    .step-label { font-size: .7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .75rem; }
+    .role-picker { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-bottom: 1.75rem; }
+    .role-card { background: var(--surface2); border: 2px solid var(--border); border-radius: var(--radius); padding: 1rem .75rem; text-align: center; cursor: pointer; transition: border-color .15s, background .15s; user-select: none; }
+    .role-card:hover { border-color: var(--blue); }
+    .role-card.selected { border-color: var(--blue); background: rgba(3,86,240,.1); }
+    .role-card .rc-title { font-weight: 800; font-size: .9rem; margin-bottom: .2rem; }
+    .role-card .rc-sub  { font-size: .72rem; color: var(--muted); }
+
+    .auth-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; }
+    .auth-tab { flex: 1; text-align: center; padding: .55rem; font-size: .82rem; font-weight: 700; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .15s; }
+    .auth-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+    .auth-section { display: none; }
+    .auth-section.active { display: block; }
+    .chair-section { display: none; }
+    .chair-section.active { display: block; }
+
+    .auth-heading { font-size: 1.2rem; font-weight: 800; margin-bottom: .25rem; }
+    .auth-sub { font-size: .82rem; color: var(--muted); margin-bottom: 1.5rem; }
+
+    .login-btn { width: 100%; background: var(--blue); color: #fff; border: none; border-radius: 8px; padding: .68rem 1rem; font-size: .9rem; font-weight: 700; font-family: var(--font); cursor: pointer; transition: background .15s; margin-top: .25rem; }
+    .login-btn:hover { background: var(--blue2); }
+    .login-hint { font-size: .72rem; color: var(--muted); margin-top: .75rem; text-align: center; }
+
+    /* ─── APP ─── */
+    #app { display: none; }
+    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; gap: 1.5rem; position: sticky; top: 0; z-index: 100; height: 60px; }
+    .logo { display: flex; align-items: center; gap: .65rem; text-decoration: none; }
+    .logo img { height: 30px; }
+    .logo-text { font-size: .88rem; font-weight: 800; color: var(--text); }
+    .logo-sub  { font-size: .62rem; color: var(--muted); font-weight: 500; }
+    nav { display: flex; gap: .15rem; }
+    .nav-btn { background: none; border: none; color: var(--muted); padding: .44rem .85rem; border-radius: 7px; font-size: .82rem; font-weight: 600; font-family: var(--font); cursor: pointer; transition: all .15s; }
+    .nav-btn:hover { background: var(--surface2); color: var(--text); }
+    .nav-btn.active { background: var(--blue); color: #fff; }
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: .75rem; }
+    .session-badge { font-size: .74rem; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; padding: .22rem .75rem; }
+    .session-badge span { color: var(--text); font-weight: 700; }
+    .btn-logout { background: none; border: 1px solid var(--border); color: var(--muted); padding: .28rem .7rem; border-radius: 7px; font-size: .74rem; font-family: var(--font); cursor: pointer; transition: all .15s; }
+    .btn-logout:hover { border-color: var(--red); color: var(--red); }
+
+    /* ─── LAYOUT ─── */
+    main { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .page { display: none; }
+    .page.active { display: block; }
+    h1 { font-size: 1.45rem; font-weight: 800; margin-bottom: .2rem; letter-spacing: -.01em; }
+    h2 { font-size: 1.05rem; font-weight: 700; margin-bottom: .9rem; }
+    .subtitle { color: var(--muted); font-size: .85rem; margin-bottom: 1.5rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
+    .card + .card { margin-top: 1rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
+    @media(max-width:700px){ .grid-2,.grid-4{ grid-template-columns:1fr; } }
+    .stat-card { text-align: center; padding: 1.5rem; }
+    .stat-num { font-size: 2.4rem; font-weight: 800; color: var(--blue); line-height: 1; }
+    .stat-label { font-size: .72rem; color: var(--muted); margin-top: .3rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 600; }
+    .badge { display: inline-block; padding: .18rem .5rem; border-radius: 4px; font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+    .badge-pending  { background: #1a2e5c; color: #60a5fa; }
+    .badge-passed   { background: #064e3b; color: #34d399; }
+    .badge-failed   { background: #450a0a; color: #f87171; }
+    .badge-accepted { background: #064e3b; color: #34d399; }
+    .badge-rejected { background: #450a0a; color: #f87171; }
+    .badge-submitted{ background: #1a2e5c; color: #60a5fa; }
+    .btn { display: inline-flex; align-items: center; gap: .35rem; padding: .46rem .95rem; border-radius: 7px; font-size: .82rem; font-weight: 700; cursor: pointer; border: none; transition: all .15s; font-family: var(--font); }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-primary:hover { background: var(--blue2); }
+    .btn-success { background: #065f46; color: #34d399; }
+    .btn-success:hover { background: #047857; }
+    .btn-danger  { background: #7f1d1d; color: #f87171; }
+    .btn-danger:hover  { background: #991b1b; }
+    .btn-ghost { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: var(--border); }
+    .btn-sm { padding: .27rem .6rem; font-size: .75rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; font-size: .68rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); padding: .7rem 1rem; border-bottom: 1px solid var(--border); white-space: nowrap; font-weight: 700; }
+    td { padding: .7rem 1rem; border-bottom: 1px solid var(--border); font-size: .85rem; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--surface2); }
+    .res-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: .85rem; overflow: hidden; }
+    .res-header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.2rem; cursor: pointer; transition: background .15s; }
+    .res-header:hover { background: var(--surface2); }
+    .res-title { font-weight: 700; font-size: .9rem; flex: 1; }
+    .res-meta { display: flex; align-items: center; gap: .65rem; }
+    .res-body { padding: 1.2rem; border-top: 1px solid var(--border); display: none; }
+    .res-body.open { display: block; }
+    .res-text { color: var(--muted); font-size: .85rem; line-height: 1.65; white-space: pre-wrap; margin-bottom: 1rem; }
+    .res-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .amend-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: .65rem; }
+    .amend-meta { display: flex; align-items: center; gap: .6rem; margin-bottom: .45rem; flex-wrap: wrap; }
+    .amend-clause { font-size: .76rem; color: var(--gold); font-weight: 700; }
+    .amend-delegate-label { font-size: .76rem; color: var(--muted); }
+    .amend-text { font-size: .85rem; line-height: 1.55; margin-bottom: .65rem; }
+    .amend-actions { display: flex; gap: .4rem; }
+    .tag { display: inline-block; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; font-size: .68rem; padding: .1rem .38rem; color: var(--muted); font-weight: 600; }
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200; display: none; align-items: center; justify-content: center; padding: 1rem; }
+    .overlay.open { display: flex; }
+    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); width: 100%; max-width: 540px; padding: 1.65rem; max-height: 90vh; overflow-y: auto; }
+    .modal-title { font-size: 1rem; font-weight: 800; margin-bottom: 1.2rem; }
+    .modal-actions { display: flex; gap: .5rem; justify-content: flex-end; margin-top: 1.2rem; }
+    #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 300; background: var(--blue); color: #fff; padding: .65rem 1.1rem; border-radius: 7px; font-size: .82rem; font-weight: 700; transform: translateY(6rem); opacity: 0; transition: all .3s; pointer-events: none; }
+    #toast.show { transform: translateY(0); opacity: 1; }
+    .flex-between { display: flex; align-items: center; justify-content: space-between; }
+    .flex { display: flex; align-items: center; }
+    .gap-1 { gap: .5rem; }
+    .mb-1 { margin-bottom: .5rem; }
+    .mb-2 { margin-bottom: 1rem; }
+    .mt-2 { margin-top: 1rem; }
+    .text-muted { color: var(--muted); }
+    .text-sm { font-size: .78rem; }
+    .empty { text-align: center; padding: 2.5rem; color: var(--muted); font-size: .85rem; }
+    .page-header { margin-bottom: 1.75rem; }
+    .filter-bar { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
+    .filter-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: .26rem .7rem; border-radius: 20px; font-size: .74rem; font-weight: 600; cursor: pointer; transition: all .15s; font-family: var(--font); }
+    .filter-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .table-wrap { overflow-x: auto; }
+    .rank-1 { color: var(--gold); font-weight: 800; }
+    .rank-2 { color: #94a3b8; font-weight: 700; }
+    .rank-3 { color: #b45309; font-weight: 700; }
+    .score-bar-wrap { display: flex; align-items: center; gap: .4rem; justify-content: center; }
+    .score-bar-track { width: 50px; height: 5px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+    .score-bar-fill  { height: 100%; border-radius: 3px; }
+    .info-banner { border-radius: var(--radius); padding: .7rem 1.1rem; font-size: .84rem; margin-bottom: 1.5rem; }
+    .info-banner.blue { background: rgba(3,86,240,.1); border: 1px solid rgba(3,86,240,.25); color: #93c5fd; }
+    .info-banner strong { color: #fff; }
+    /* tally inline add row */
+    .tally-add-row td { background: var(--surface2); }
+    .tally-add-row input { padding: .35rem .6rem; font-size: .82rem; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     LOGIN / REGISTER SCREEN
+══════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-hero">
+    <div class="hero-quote">
+      <p>26 Years of Commitment to Development</p>
+      <span>Koc School &nbsp;·&nbsp; Istanbul, Turkey</span>
+    </div>
+  </div>
+
+  <div class="login-panel">
+    <div class="login-panel-inner">
+
+      <a class="login-logo" href="#">
+        <img src="https://cdn.prod.website-files.com/66a3ed7fba757f6818a563b5/66bc917fc59fecbef5777684_mundp%20(1).svg" alt="MUNDP" />
+        <div>
+          <div class="login-logo-text">MUNDP</div>
+          <div class="login-logo-sub">Digital Platform</div>
+        </div>
+      </a>
+
+      <div class="step-label">Select your role</div>
+      <div class="role-picker">
+        <div class="role-card" id="role-chair" onclick="selectRole('chair')">
+          <div class="rc-title">Chair</div>
+          <div class="rc-sub">Full access</div>
+        </div>
+        <div class="role-card" id="role-delegate" onclick="selectRole('delegate')">
+          <div class="rc-title">Delegate</div>
+          <div class="rc-sub">View &amp; amend</div>
+        </div>
+      </div>
+
+      <!-- CHAIR -->
+      <div class="chair-section" id="chair-section">
+        <div class="auth-heading">Chair Access</div>
+        <div class="auth-sub">Enter the chair access code provided by your secretariat.</div>
+        <div class="err-box" id="err-chair">Incorrect access code. Please try again.</div>
+        <div class="form-group">
+          <label>Access Code</label>
+          <input type="password" id="chair-code" placeholder="Enter access code"
+                 onkeydown="if(event.key==='Enter')loginChair()" />
+        </div>
+        <button class="login-btn" onclick="loginChair()">Sign In as Chair</button>
+        <div class="login-hint">Default code: <strong>CHAIR2026</strong></div>
+      </div>
+
+      <!-- DELEGATE -->
+      <div class="auth-section" id="delegate-section">
+        <div class="auth-tabs">
+          <div class="auth-tab active" id="tab-login"    onclick="switchTab('login')">Sign In</div>
+          <div class="auth-tab"        id="tab-register" onclick="switchTab('register')">Register</div>
+        </div>
+
+        <!-- Sign In -->
+        <div class="auth-section active" id="del-login-form">
+          <div class="auth-heading">Welcome back</div>
+          <div class="auth-sub">Sign in with your delegate account.</div>
+          <div class="err-box" id="err-del-login">Email or password is incorrect.</div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="del-login-email" placeholder="your@email.com"
+                   onkeydown="if(event.key==='Enter')document.getElementById('del-login-pw').focus()" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="del-login-pw" placeholder="Password"
+                   onkeydown="if(event.key==='Enter')loginDelegate()" />
+          </div>
+          <button class="login-btn" onclick="loginDelegate()">Sign In</button>
+          <div class="login-hint">No account? <span style="color:var(--blue);cursor:pointer;font-weight:700;" onclick="switchTab('register')">Register here</span></div>
+        </div>
+
+        <!-- Register -->
+        <div class="auth-section" id="del-register-form">
+          <div class="auth-heading">Create account</div>
+          <div class="auth-sub">Register to submit amendments and view resolutions.</div>
+          <div class="err-box" id="err-del-reg"></div>
+          <div class="form-group">
+            <label>Delegation (Country / School)</label>
+            <input id="reg-delegation" placeholder="e.g. Republic of Turkey" />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="reg-email" placeholder="your@email.com" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="reg-pw" placeholder="Min. 6 characters" />
+          </div>
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" id="reg-pw2" placeholder="Repeat password"
+                   onkeydown="if(event.key==='Enter')registerDelegate()" />
+          </div>
+          <button class="login-btn" onclick="registerDelegate()">Create Account</button>
+          <div class="login-hint">Already registered? <span style="color:var(--blue);cursor:pointer;font-weight:700;" onclick="switchTab('login')">Sign in</span></div>
+        </div>
+
+        <!-- Confirmation screen — shown after successful registration -->
+        <div class="auth-section" id="del-confirm-screen">
+          <div style="text-align:center;padding:1.5rem 0 1rem;">
+            <div style="width:60px;height:60px;border-radius:50%;background:rgba(16,185,129,.15);border:2px solid var(--green);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.6rem;color:var(--green);font-weight:800;">&#10003;</div>
+            <div style="font-size:1.25rem;font-weight:800;margin-bottom:.5rem;">Account Created</div>
+            <div style="font-size:.85rem;color:var(--muted);margin-bottom:.35rem;">Your delegate account is ready.</div>
+            <div id="confirm-delegation" style="font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.2rem;"></div>
+            <div id="confirm-email"      style="font-size:.8rem;color:var(--muted);margin-bottom:1.75rem;"></div>
+          </div>
+          <button class="login-btn" onclick="goToSignIn()">Sign In Now</button>
+          <div class="login-hint" style="margin-top:.75rem;">Your email has been pre-filled below.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     APP SHELL
+══════════════════════════════════════════ -->
+<div id="app">
+  <header>
+    <a class="logo" href="#">
+      <img src="https://cdn.prod.website-files.com/66a3ed7fba757f6818a563b5/66bc917fc59fecbef5777684_mundp%20(1).svg" alt="MUNDP" />
+      <div>
+        <div class="logo-text" id="hdr-name">MUNDP</div>
+        <div class="logo-sub"  id="hdr-sub">Koc Okulu MUN</div>
+      </div>
+    </a>
+    <nav id="main-nav"></nav>
+    <div class="header-right">
+      <div class="session-badge" id="session-badge"></div>
+      <button class="btn-logout" onclick="logout()">Sign out</button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ── DASHBOARD (chair only) ── -->
+    <div class="page" id="page-dashboard">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <p class="subtitle">Conference overview</p>
+      </div>
+      <div class="grid-4 mb-2" id="dash-stats"></div>
+      <div class="grid-2">
+        <div>
+          <h2>Recent Resolutions</h2>
+          <div id="dash-resolutions"></div>
+        </div>
+        <div>
+          <h2>Pending Amendments</h2>
+          <div id="dash-amendments"></div>
+        </div>
+      </div>
+      <div class="mt-2">
+        <h2>Delegate Leaderboard</h2>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead><tr>
+                <th>#</th><th>Delegation</th>
+                <th style="text-align:center;">POI Avg</th>
+                <th style="text-align:center;">Speech Avg</th>
+                <th style="text-align:center;">Res Avg</th>
+                <th style="text-align:center;">Total</th>
+              </tr></thead>
+              <tbody id="dash-leaderboard"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── RESOLUTIONS ── -->
+    <div class="page" id="page-resolutions">
+      <div class="page-header flex-between">
+        <div>
+          <h1>Resolutions</h1>
+          <p class="subtitle" id="res-subtitle">Chair-proposed resolutions and voting outcomes</p>
+        </div>
+        <!-- Only chairs see Add button -->
+        <button class="btn btn-primary" id="btn-add-res" onclick="openModal('modal-add-res')" style="display:none;">Add Resolution</button>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterRes('all',this)">All</button>
+        <button class="filter-btn" onclick="filterRes('pending',this)">Pending</button>
+        <button class="filter-btn" onclick="filterRes('passed',this)">Passed</button>
+        <button class="filter-btn" onclick="filterRes('failed',this)">Failed</button>
+      </div>
+      <div id="res-list"></div>
+    </div>
+
+    <!-- ── AMENDMENTS ── -->
+    <div class="page" id="page-amendments">
+      <div class="page-header flex-between">
+        <div>
+          <h1>Amendments</h1>
+          <p class="subtitle" id="amend-subtitle">Proposed changes to active resolutions</p>
+        </div>
+        <!-- Only delegates see Submit button -->
+        <button class="btn btn-primary" id="btn-add-amend" onclick="openModal('modal-add-amend')" style="display:none;">Submit Amendment</button>
+      </div>
+      <div id="amend-info-banner" class="info-banner blue" style="display:none;"></div>
+      <div class="filter-bar" id="amend-filter-bar">
+        <button class="filter-btn active" onclick="filterAmend('all',this)">All</button>
+        <button class="filter-btn" onclick="filterAmend('submitted',this)">Submitted</button>
+        <button class="filter-btn" onclick="filterAmend('accepted',this)">Accepted</button>
+        <button class="filter-btn" onclick="filterAmend('rejected',this)">Rejected</button>
+      </div>
+      <div id="amend-list"></div>
+    </div>
+
+    <!-- ── DELEGATE TALLY (chair only) ── -->
+    <div class="page" id="page-tally">
+      <div class="page-header flex-between">
+        <div>
+          <h1>Delegate Tally</h1>
+          <p class="subtitle">Add and track scores per delegation (1–5)</p>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="exportTally()">Export CSV</button>
+      </div>
+
+      <!-- Add delegation row -->
+      <div class="card mb-2">
+        <div style="display:flex;gap:.65rem;align-items:flex-end;">
+          <div class="form-group" style="flex:1;margin:0;">
+            <label>Add Delegation to Tally</label>
+            <input id="new-tally-del" placeholder="e.g. Republic of Turkey" onkeydown="if(event.key==='Enter')addTallyDelegation()" />
+          </div>
+          <button class="btn btn-primary" style="height:38px;" onclick="addTallyDelegation()">Add</button>
+        </div>
+      </div>
+
+      <div class="flex-between mb-2">
+        <div class="flex gap-1">
+          <input id="tally-search" style="width:200px;" placeholder="Search..." oninput="renderTally()" />
+          <select id="tally-sort" onchange="renderTally()" style="width:150px;">
+            <option value="name">Sort: Name</option>
+            <option value="total">Sort: Total</option>
+            <option value="poi">Sort: POI</option>
+            <option value="speech">Sort: Speech</option>
+            <option value="res">Sort: Resolution</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th style="width:36px;">#</th>
+              <th>Delegation</th>
+              <th style="text-align:center;">POI Scores</th>
+              <th style="text-align:center;">POI Avg</th>
+              <th style="text-align:center;">Speech Scores</th>
+              <th style="text-align:center;">Speech Avg</th>
+              <th style="text-align:center;">Res Scores</th>
+              <th style="text-align:center;">Res Avg</th>
+              <th style="text-align:center;color:var(--gold);">Total</th>
+              <th style="text-align:center;">Actions</th>
+            </tr></thead>
+            <tbody id="tally-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ══ MODALS ══ -->
+
+<!-- Add Resolution (chair only) -->
+<div class="overlay" id="modal-add-res" onclick="bgClose(event,'modal-add-res')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title">Add Resolution</div>
+    <div class="form-group">
+      <label>Resolution Title</label>
+      <input id="res-title-inp" placeholder="e.g. DR 1.1 — Climate Action Framework" />
+    </div>
+    <div class="form-group">
+      <label>Submitted By (Delegation)</label>
+      <input id="res-delegate-inp" placeholder="e.g. Republic of Turkey" />
+    </div>
+    <div class="form-group">
+      <label>Resolution Text</label>
+      <textarea id="res-text-inp" rows="8" placeholder="Full resolution text..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-res')">Cancel</button>
+      <button class="btn btn-primary" onclick="addResolution()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Submit Amendment (delegates only) -->
+<div class="overlay" id="modal-add-amend" onclick="bgClose(event,'modal-add-amend')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title">Submit Amendment</div>
+    <div class="form-group">
+      <label>Target Resolution</label>
+      <select id="amend-res-inp"></select>
+    </div>
+    <div class="form-group">
+      <label>Clause / Section</label>
+      <input id="amend-clause-inp" placeholder="e.g. OP 3, PP 1, Clause 4..." />
+    </div>
+    <div class="form-group">
+      <label>Amendment Type</label>
+      <select id="amend-type-inp">
+        <option value="Friendly">Friendly Amendment</option>
+        <option value="Unfriendly">Unfriendly Amendment</option>
+        <option value="Addition">Addition</option>
+        <option value="Deletion">Deletion</option>
+        <option value="Substitution">Substitution</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Proposed Change</label>
+      <textarea id="amend-text-inp" rows="5" placeholder="Describe the amendment..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-amend')">Cancel</button>
+      <button class="btn btn-primary" onclick="submitAmendment()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Score Entry -->
+<div class="overlay" id="modal-add-score" onclick="bgClose(event,'modal-add-score')">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title" id="score-modal-title">Add Score</div>
+    <div id="score-modal-body"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-add-score')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveScoreEntry()">Save Score</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+//  DB  — namespaced so stale keys never interfere
+// ═══════════════════════════════════════════
+const _mem = {};
+const _ls  = (() => { try { localStorage.setItem('__t','1'); localStorage.removeItem('__t'); return true; } catch { return false; } })();
+const DB = {
+  get: k => {
+    if (_ls) { try { const v = localStorage.getItem('mundp3_'+k); return v !== null ? JSON.parse(v) : null; } catch {} }
+    return k in _mem ? _mem[k] : null;
+  },
+  set: (k, v) => {
+    if (_ls) { try { localStorage.setItem('mundp3_'+k, JSON.stringify(v)); return; } catch {} }
+    _mem[k] = v;
+  },
+};
+
+function uid()  { return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+// ═══════════════════════════════════════════
+//  SEED  — idempotent, runs every load
+// ═══════════════════════════════════════════
+function seed() {
+  if (DB.get('chairCode')   === null) DB.set('chairCode',   'CHAIR2026');
+  if (DB.get('delegates')   === null) DB.set('delegates',   []);
+  if (DB.get('tallyDels')   === null) DB.set('tallyDels',   []);
+  if (DB.get('resolutions') === null) DB.set('resolutions', []);
+  if (DB.get('amendments')  === null) DB.set('amendments',  []);
+  if (DB.get('scores')      === null) DB.set('scores',      {});
+  if (DB.get('settings')    === null) DB.set('settings',    { name:'MUNDP 2026', committee:'General Assembly', topic:'Sustainable Development' });
+}
+
+const getChairCode    = () => DB.get('chairCode')   || 'CHAIR2026';
+const getDelegates    = () => DB.get('delegates')   || [];   // registered accounts
+const getTallyDels    = () => DB.get('tallyDels')   || [];   // manual delegation names for scoring
+const getResolutions  = () => DB.get('resolutions') || [];
+const getAmendments   = () => DB.get('amendments')  || [];
+const getScores       = () => DB.get('scores')      || {};
+const getSettings     = () => DB.get('settings')    || {};
+
+// All unique delegation names visible in tally
+// (union of registered accounts + manually added)
+function getAllTallyNames() {
+  const fromAccounts = getDelegates().map(d => d.delegation);
+  const manual       = getTallyDels();
+  const merged = [...new Set([...fromAccounts, ...manual])];
+  return merged.sort((a,b) => a.localeCompare(b));
+}
+
+// ═══════════════════════════════════════════
+//  SESSION
+// ═══════════════════════════════════════════
+let session = null;
+const isChair    = () => session?.role === 'chair';
+const isDelegate = () => session?.role === 'delegate';
+
+// ═══════════════════════════════════════════
+//  LOGIN SCREEN
+// ═══════════════════════════════════════════
+let selectedRole = null;
+
+function selectRole(role) {
+  selectedRole = role;
+  document.getElementById('role-chair').classList.toggle('selected', role === 'chair');
+  document.getElementById('role-delegate').classList.toggle('selected', role === 'delegate');
+  document.getElementById('chair-section').classList.toggle('active', role === 'chair');
+  document.getElementById('delegate-section').classList.toggle('active', role === 'delegate');
+  clearLoginErrors();
+}
+
+let lastRegisteredEmail = '';
+
+function switchTab(tab) {
+  document.getElementById('del-login-form').classList.remove('active');
+  document.getElementById('del-register-form').classList.remove('active');
+  document.getElementById('del-confirm-screen').classList.remove('active');
+  // Hide tabs bar when on confirmation screen
+  document.querySelector('.auth-tabs').style.display = tab === 'confirm' ? 'none' : '';
+  document.getElementById('tab-login').classList.toggle('active',    tab === 'login');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  if (tab === 'login')    document.getElementById('del-login-form').classList.add('active');
+  if (tab === 'register') document.getElementById('del-register-form').classList.add('active');
+  if (tab === 'confirm')  document.getElementById('del-confirm-screen').classList.add('active');
+  clearLoginErrors();
+}
+
+function clearLoginErrors() {
+  ['err-chair','err-del-login','err-del-reg'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.classList.remove('show'); el.textContent = ''; }
+  });
+}
+
+function goToSignIn() {
+  document.getElementById('del-login-email').value = lastRegisteredEmail;
+  switchTab('login');
+  document.getElementById('del-login-pw').focus();
+}
+
+// ── Chair ──
+function loginChair() {
+  const code = document.getElementById('chair-code').value.trim();
+  if (code !== getChairCode()) {
+    document.getElementById('err-chair').classList.add('show'); return;
+  }
+  session = { role: 'chair' };
+  startApp();
+}
+
+// ── Delegate sign-in ──
+function loginDelegate() {
+  const email = document.getElementById('del-login-email').value.trim().toLowerCase();
+  const pw    = document.getElementById('del-login-pw').value;
+  const errEl = document.getElementById('err-del-login');
+
+  if (!email || !pw) {
+    errEl.textContent = 'Please enter your email and password.';
+    errEl.classList.add('show'); return;
+  }
+
+  const account = getDelegates().find(d => d.email.toLowerCase() === email && d.password === pw);
+  if (!account) {
+    errEl.textContent = 'Email or password is incorrect.';
+    errEl.classList.add('show'); return;
+  }
+  errEl.classList.remove('show');
+  session = { role: 'delegate', name: account.delegation, email: account.email };
+  startApp();
+}
+
+// ── Delegate register ──
+function registerDelegate() {
+  const errEl = document.getElementById('err-del-reg');
+  errEl.classList.remove('show');
+  errEl.textContent = '';
+
+  try {
+    const delegation = document.getElementById('reg-delegation').value.trim();
+    const email      = document.getElementById('reg-email').value.trim().toLowerCase();
+    const pw         = document.getElementById('reg-pw').value;
+    const pw2        = document.getElementById('reg-pw2').value;
+
+    if (!delegation || !email || !pw || !pw2) {
+      errEl.textContent = 'All fields are required.'; errEl.classList.add('show'); return;
+    }
+    if (pw.length < 6) {
+      errEl.textContent = 'Password must be at least 6 characters.'; errEl.classList.add('show'); return;
+    }
+    if (pw !== pw2) {
+      errEl.textContent = 'Passwords do not match.'; errEl.classList.add('show'); return;
+    }
+
+    const delegates = getDelegates();
+    if (delegates.find(d => d.email.toLowerCase() === email)) {
+      errEl.textContent = 'This email is already registered — try signing in instead.';
+      errEl.classList.add('show');
+      // Pre-fill login email so they can sign in easily
+      document.getElementById('del-login-email').value = email;
+      return;
+    }
+
+    // Save account
+    const newAccount = { id: uid(), email, password: pw, delegation };
+    delegates.push(newAccount);
+    DB.set('delegates', delegates);
+
+    // Verify the save actually worked
+    const saved = getDelegates().find(d => d.email === email);
+    if (!saved) {
+      errEl.textContent = 'Could not save your account. Your browser may have storage disabled.';
+      errEl.classList.add('show'); return;
+    }
+
+    // Clear form fields
+    ['reg-delegation','reg-email','reg-pw','reg-pw2'].forEach(id => document.getElementById(id).value = '');
+
+    // Show confirmation screen
+    lastRegisteredEmail = email;
+    document.getElementById('confirm-delegation').textContent = delegation;
+    document.getElementById('confirm-email').textContent = email;
+    switchTab('confirm');
+
+  } catch(e) {
+    errEl.textContent = 'Error: ' + e.message;
+    errEl.classList.add('show');
+    console.error('registerDelegate error:', e);
+  }
+}
+
+// ── Start app ──
+function startApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  renderHeader();
+  renderNav();
+  goto(isChair() ? 'dashboard' : 'resolutions');
+}
+
+// ── Logout ──
+function logout() {
+  session = null; selectedRole = null;
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+  ['chair-code','del-login-email','del-login-pw'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('chair-section').classList.remove('active');
+  document.getElementById('delegate-section').classList.remove('active');
+  document.getElementById('role-chair').classList.remove('selected');
+  document.getElementById('role-delegate').classList.remove('selected');
+  switchTab('login');
+}
+
+// ═══════════════════════════════════════════
+//  HEADER / NAV
+// ═══════════════════════════════════════════
+function renderHeader() {
+  const s = getSettings();
+  document.getElementById('hdr-name').textContent = s.name || 'MUNDP';
+  document.getElementById('hdr-sub').textContent  = s.committee ? `${s.committee} — ${s.topic||''}` : 'Koc Okulu MUN';
+  document.getElementById('session-badge').innerHTML = isChair()
+    ? 'Signed in as <span>Chair</span>'
+    : `<span>${session.name}</span>`;
+}
+
+// Chair sees: Dashboard, Resolutions, Amendments, Tally
+// Delegate sees: Resolutions, Amendments
+const CHAIR_PAGES    = ['dashboard','resolutions','amendments','tally'];
+const DELEGATE_PAGES = ['resolutions','amendments'];
+const PAGE_LABELS    = { dashboard:'Dashboard', resolutions:'Resolutions', amendments:'Amendments', tally:'Delegate Tally' };
+
+function renderNav() {
+  const pages = isChair() ? CHAIR_PAGES : DELEGATE_PAGES;
+  document.getElementById('main-nav').innerHTML = pages.map(p =>
+    `<button class="nav-btn" onclick="goto('${p}')" id="nav-${p}">${PAGE_LABELS[p]}</button>`
+  ).join('');
+}
+
+// ═══════════════════════════════════════════
+//  ROUTING
+// ═══════════════════════════════════════════
+let currentPage = '';
+function goto(page) {
+  const allowed = isChair() ? CHAIR_PAGES : DELEGATE_PAGES;
+  if (!allowed.includes(page)) return;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  const btn = document.getElementById('nav-'+page);
+  if (btn) btn.classList.add('active');
+  currentPage = page;
+  ({ dashboard:renderDashboard, resolutions:renderResolutions, amendments:renderAmendments, tally:renderTally })[page]?.();
+}
+
+function avg(arr) { if (!arr||!arr.length) return 0; return arr.reduce((a,b)=>a+b,0)/arr.length; }
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 2500);
+}
+
+function openModal(id) {
+  if (id === 'modal-add-amend') {
+    const ress = getResolutions().filter(r=>r.status==='pending');
+    document.getElementById('amend-res-inp').innerHTML = ress.length
+      ? ress.map(r=>`<option value="${r.id}">${r.title}</option>`).join('')
+      : '<option value="">No pending resolutions</option>';
+  }
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function bgClose(e,id)  { if (e.target.id===id) closeModal(id); }
+
+// ═══════════════════════════════════════════
+//  DASHBOARD
+// ═══════════════════════════════════════════
+function renderDashboard() {
+  const ress   = getResolutions();
+  const amends = getAmendments();
+  const dels   = getAllTallyNames();
+
+  document.getElementById('dash-stats').innerHTML = `
+    <div class="card stat-card"><div class="stat-num">${dels.length}</div><div class="stat-label">Delegations</div></div>
+    <div class="card stat-card"><div class="stat-num">${ress.length}</div><div class="stat-label">Resolutions</div></div>
+    <div class="card stat-card"><div class="stat-num">${amends.filter(a=>a.status==='submitted').length}</div><div class="stat-label">Pending Amendments</div></div>
+    <div class="card stat-card"><div class="stat-num" style="color:var(--green)">${ress.filter(r=>r.status==='passed').length}</div><div class="stat-label">Passed</div></div>
+  `;
+
+  const rEl = document.getElementById('dash-resolutions');
+  rEl.innerHTML = ress.length
+    ? ress.slice(-4).reverse().map(r=>`
+        <div class="card mb-1" style="cursor:pointer" onclick="goto('resolutions')">
+          <div class="flex-between"><span style="font-weight:700;font-size:.85rem;">${r.title}</span><span class="badge badge-${r.status}">${r.status}</span></div>
+          <div class="text-muted text-sm" style="margin-top:.3rem;">${r.delegate}</div>
+        </div>`).join('')
+    : '<div class="empty">No resolutions yet</div>';
+
+  const pending = amends.filter(a=>a.status==='submitted').slice(-4).reverse();
+  document.getElementById('dash-amendments').innerHTML = pending.length
+    ? pending.map(a=>`
+        <div class="card mb-1" style="cursor:pointer" onclick="goto('amendments')">
+          <div class="flex-between mb-1"><span class="tag">${a.type}</span><span class="badge badge-submitted">submitted</span></div>
+          <div style="font-size:.85rem;">${a.text.substring(0,80)}${a.text.length>80?'...':''}</div>
+          <div class="text-muted text-sm" style="margin-top:.3rem;">${a.delegate}</div>
+        </div>`).join('')
+    : '<div class="empty">No pending amendments</div>';
+
+  // leaderboard
+  const scores = getScores();
+  let rows = dels.map(d=>{
+    const ds=scores[d]||{};
+    const pa=avg(ds.poi||[]),sa=avg(ds.speech||[]),ra=avg(ds.resolution||[]);
+    return {d,pa,sa,ra,ta:avg([pa,sa,ra].filter(x=>x>0))};
+  }).sort((a,b)=>b.ta-a.ta).slice(0,5);
+
+  const el = document.getElementById('dash-leaderboard');
+  el.innerHTML = rows.length
+    ? rows.map((r,i)=>`<tr>
+        <td class="${i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':''}">${i===0?'1st':i===1?'2nd':i===2?'3rd':'#'+(i+1)}</td>
+        <td>${r.d}</td>
+        <td style="text-align:center;">${r.pa?r.pa.toFixed(2):'—'}</td>
+        <td style="text-align:center;">${r.sa?r.sa.toFixed(2):'—'}</td>
+        <td style="text-align:center;">${r.ra?r.ra.toFixed(2):'—'}</td>
+        <td style="text-align:center;color:var(--gold);font-weight:800;">${r.ta?r.ta.toFixed(2):'—'}</td>
+      </tr>`).join('')
+    : '<tr><td colspan="6" class="empty">No score data yet</td></tr>';
+}
+
+// ═══════════════════════════════════════════
+//  RESOLUTIONS
+// ═══════════════════════════════════════════
+let resFilter = 'all';
+function filterRes(f,btn) {
+  resFilter = f;
+  document.querySelectorAll('#page-resolutions .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); renderResolutions();
+}
+
+function renderResolutions() {
+  // Show Add button only for chairs
+  document.getElementById('btn-add-res').style.display = isChair() ? '' : 'none';
+
+  const ress = getResolutions().filter(r=>resFilter==='all'||r.status===resFilter);
+  const el   = document.getElementById('res-list');
+  if (!ress.length) { el.innerHTML='<div class="empty">No resolutions found</div>'; return; }
+
+  el.innerHTML = ress.map(r=>{
+    const amends = getAmendments().filter(a=>a.resId===r.id);
+    // Chair gets status controls; delegates get read-only view
+    const actions = isChair() ? `<div class="res-actions">
+      ${r.status!=='passed' ?`<button class="btn btn-success btn-sm" onclick="setResStatus('${r.id}','passed')">Mark Passed</button>`:''}
+      ${r.status!=='failed' ?`<button class="btn btn-danger btn-sm"  onclick="setResStatus('${r.id}','failed')">Mark Failed</button>`:''}
+      ${r.status!=='pending'?`<button class="btn btn-ghost btn-sm"   onclick="setResStatus('${r.id}','pending')">Reopen</button>`:''}
+      <button class="btn btn-ghost btn-sm" onclick="deleteResolution('${r.id}')">Delete</button>
+    </div>` : '';
+
+    return `<div class="res-card">
+      <div class="res-header" onclick="toggleRes('rb-${r.id}')">
+        <div>
+          <div class="res-title">${r.title}</div>
+          <div class="text-muted text-sm" style="margin-top:.3rem;">${r.delegate} &nbsp;&middot;&nbsp; ${amends.length} amendment${amends.length!==1?'s':''}</div>
+        </div>
+        <div class="res-meta">
+          <span class="badge badge-${r.status}">${r.status}</span>
+          <span class="text-muted" style="font-size:.85rem;">&#9662;</span>
+        </div>
+      </div>
+      <div class="res-body" id="rb-${r.id}">
+        <div class="res-text">${r.text}</div>
+        <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0;"/>
+        <div style="margin-bottom:.75rem;">
+          <strong style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;">Amendments (${amends.length})</strong>
+          ${amends.length ? amends.map(a=>`
+            <div class="amend-card" style="margin-top:.5rem;">
+              <div class="amend-meta">
+                <span class="amend-clause">${a.clause}</span>
+                <span class="tag">${a.type}</span>
+                <span class="amend-delegate-label">${a.delegate}</span>
+                <span class="badge badge-${a.status}">${a.status}</span>
+              </div>
+              <div class="amend-text">${a.text}</div>
+            </div>`).join('') : '<div class="text-muted text-sm" style="margin-top:.4rem;">No amendments submitted</div>'}
+        </div>
+        ${actions}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleRes(id) { document.getElementById(id).classList.toggle('open'); }
+
+function addResolution() {
+  if (!isChair()) return;
+  const title    = document.getElementById('res-title-inp').value.trim();
+  const delegate = document.getElementById('res-delegate-inp').value.trim();
+  const text     = document.getElementById('res-text-inp').value.trim();
+  if (!title || !text) { toast('Please fill in title and resolution text'); return; }
+  const ress = getResolutions();
+  ress.push({ id:uid(), title, delegate: delegate||'Chair', text, status:'pending', createdAt:Date.now() });
+  DB.set('resolutions', ress);
+  closeModal('modal-add-res');
+  document.getElementById('res-title-inp').value    = '';
+  document.getElementById('res-delegate-inp').value = '';
+  document.getElementById('res-text-inp').value     = '';
+  toast('Resolution added'); renderResolutions();
+  if (currentPage==='dashboard') renderDashboard();
+}
+
+function setResStatus(id, status) {
+  if (!isChair()) return;
+  const ress = getResolutions(), r = ress.find(r=>r.id===id);
+  if (r) { r.status=status; DB.set('resolutions',ress); renderResolutions(); toast(`Marked ${status}`); }
+}
+
+function deleteResolution(id) {
+  if (!isChair() || !confirm('Delete this resolution and its amendments?')) return;
+  DB.set('resolutions', getResolutions().filter(r=>r.id!==id));
+  DB.set('amendments',  getAmendments().filter(a=>a.resId!==id));
+  renderResolutions(); toast('Deleted');
+}
+
+// ═══════════════════════════════════════════
+//  AMENDMENTS
+// ═══════════════════════════════════════════
+let amendFilter = 'all';
+function filterAmend(f,btn) {
+  amendFilter = f;
+  document.querySelectorAll('#page-amendments .filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); renderAmendments();
+}
+
+function renderAmendments() {
+  const submitBtn = document.getElementById('btn-add-amend');
+  const filterBar = document.getElementById('amend-filter-bar');
+  const banner    = document.getElementById('amend-info-banner');
+
+  if (isChair()) {
+    // Chair: sees all amendments, can manage them, cannot submit
+    submitBtn.style.display = 'none';
+    filterBar.style.display = '';
+    banner.style.display    = 'none';
+  } else {
+    // Delegate: can submit, sees only their own, no filter bar
+    submitBtn.style.display = '';
+    filterBar.style.display = 'none';
+    banner.style.display    = 'block';
+    banner.innerHTML        = `Submitting as <strong>${session.name}</strong>. You can only see your own amendments.`;
+  }
+
+  let amends = getAmendments();
+  if (isDelegate()) amends = amends.filter(a=>a.delegate===session.name);
+  else amends = amends.filter(a=>amendFilter==='all'||a.status===amendFilter);
+  amends = amends.sort((a,b)=>b.createdAt-a.createdAt);
+
+  const el = document.getElementById('amend-list');
+  if (!amends.length) { el.innerHTML='<div class="empty">No amendments found</div>'; return; }
+
+  el.innerHTML = amends.map(a=>{
+    const chairActions = isChair() ? `<div class="amend-actions">
+      ${a.status!=='accepted' ?`<button class="btn btn-success btn-sm" onclick="setAmendStatus('${a.id}','accepted')">Accept</button>`:''}
+      ${a.status!=='rejected' ?`<button class="btn btn-danger btn-sm"  onclick="setAmendStatus('${a.id}','rejected')">Reject</button>`:''}
+      ${a.status!=='submitted'?`<button class="btn btn-ghost btn-sm"   onclick="setAmendStatus('${a.id}','submitted')">Reopen</button>`:''}
+      <button class="btn btn-ghost btn-sm" onclick="deleteAmendment('${a.id}')">Delete</button>
+    </div>` : '';
+    return `<div class="amend-card" style="background:var(--surface);border-color:var(--border);">
+      <div class="amend-meta">
+        <span class="amend-clause">${a.clause}</span>
+        <span class="tag">${a.type}</span>
+        <span class="badge badge-${a.status}">${a.status}</span>
+        <span class="amend-delegate-label" style="margin-left:auto;">${a.delegate}</span>
+      </div>
+      <div style="font-size:.74rem;color:var(--muted);margin-bottom:.45rem;">Resolution: <strong>${a.resTitle}</strong></div>
+      <div class="amend-text">${a.text}</div>
+      ${chairActions}
+    </div>`;
+  }).join('');
+}
+
+function submitAmendment() {
+  if (!isDelegate()) return;
+  const ress = getResolutions().filter(r=>r.status==='pending');
+  if (!ress.length) { toast('No pending resolutions to amend'); return; }
+  const resId  = document.getElementById('amend-res-inp').value;
+  const clause = document.getElementById('amend-clause-inp').value.trim();
+  const type   = document.getElementById('amend-type-inp').value;
+  const text   = document.getElementById('amend-text-inp').value.trim();
+  if (!resId || !text) { toast('Please fill all required fields'); return; }
+  const res    = getResolutions().find(r=>r.id===resId);
+  const amends = getAmendments();
+  amends.push({ id:uid(), delegate:session.name, resId, resTitle:res?res.title:'?', clause:clause||'General', type, text, status:'submitted', createdAt:Date.now() });
+  DB.set('amendments', amends);
+  closeModal('modal-add-amend');
+  document.getElementById('amend-text-inp').value   = '';
+  document.getElementById('amend-clause-inp').value = '';
+  toast('Amendment submitted'); renderAmendments();
+  if (currentPage==='dashboard') renderDashboard();
+}
+
+function setAmendStatus(id, status) {
+  if (!isChair()) return;
+  const amends = getAmendments(), a = amends.find(a=>a.id===id);
+  if (a) { a.status=status; DB.set('amendments',amends); renderAmendments(); toast(`Amendment ${status}`); }
+}
+
+function deleteAmendment(id) {
+  if (!isChair()) return;
+  DB.set('amendments', getAmendments().filter(a=>a.id!==id));
+  renderAmendments(); toast('Deleted');
+}
+
+// ═══════════════════════════════════════════
+//  TALLY  (chair only)
+// ═══════════════════════════════════════════
+let activeDelegateScore = null;
+
+function addTallyDelegation() {
+  const inp  = document.getElementById('new-tally-del');
+  const name = inp.value.trim();
+  if (!name) return;
+  const manual = getTallyDels();
+  const all    = getAllTallyNames();
+  if (all.map(n=>n.toLowerCase()).includes(name.toLowerCase())) {
+    toast('Delegation already in tally'); inp.value=''; return;
+  }
+  manual.push(name);
+  DB.set('tallyDels', manual);
+  inp.value = '';
+  toast(`Added: ${name}`);
+  renderTally();
+}
+
+function renderTally() {
+  const search = (document.getElementById('tally-search')||{}).value?.toLowerCase() || '';
+  const sortBy = (document.getElementById('tally-sort')||{}).value || 'name';
+  const scores = getScores();
+
+  let rows = getAllTallyNames()
+    .filter(d => d.toLowerCase().includes(search))
+    .map(d => {
+      const ds = scores[d] || {};
+      const pa = avg(ds.poi||[]), sa = avg(ds.speech||[]), ra = avg(ds.resolution||[]);
+      return { d, poi:ds.poi||[], speech:ds.speech||[], res:ds.resolution||[], pa, sa, ra, ta:avg([pa,sa,ra].filter(x=>x>0)) };
+    });
+
+  if (sortBy==='total') rows.sort((a,b)=>b.ta-a.ta);
+  else if (sortBy==='poi')    rows.sort((a,b)=>b.pa-a.pa);
+  else if (sortBy==='speech') rows.sort((a,b)=>b.sa-a.sa);
+  else if (sortBy==='res')    rows.sort((a,b)=>b.ra-a.ra);
+  else rows.sort((a,b)=>a.d.localeCompare(b.d));
+
+  const tbody = document.getElementById('tally-body');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="10" class="empty">No delegations yet — add one above</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map((r,i)=>`<tr>
+    <td style="color:var(--muted);font-size:.78rem;">${i+1}</td>
+    <td><strong>${r.d}</strong></td>
+    <td style="text-align:center;">
+      <div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;max-width:140px;">
+        ${r.poi.map(s=>`<span class="tag">${s}</span>`).join('') || '<span class="text-muted text-sm">—</span>'}
+      </div>
+    </td>
+    <td style="text-align:center;">${r.pa ? scoreBar(r.pa) : '—'}</td>
+    <td style="text-align:center;">
+      <div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;max-width:140px;">
+        ${r.speech.map(s=>`<span class="tag">${s}</span>`).join('') || '<span class="text-muted text-sm">—</span>'}
+      </div>
+    </td>
+    <td style="text-align:center;">${r.sa ? scoreBar(r.sa) : '—'}</td>
+    <td style="text-align:center;">
+      <div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;max-width:140px;">
+        ${r.res.map(s=>`<span class="tag">${s}</span>`).join('') || '<span class="text-muted text-sm">—</span>'}
+      </div>
+    </td>
+    <td style="text-align:center;">${r.ra ? scoreBar(r.ra) : '—'}</td>
+    <td style="text-align:center;"><span style="color:var(--gold);font-weight:800;font-size:1rem;">${r.ta ? r.ta.toFixed(2) : '—'}</span></td>
+    <td style="text-align:center;white-space:nowrap;">
+      <button class="btn btn-primary btn-sm" onclick="openScoreEntry('${r.d.replace(/'/g,"\\'")}')">+ Score</button>
+      <button class="btn btn-ghost btn-sm" style="margin-left:.25rem;" onclick="removeTallyRow('${r.d.replace(/'/g,"\\'")}')">&#10005;</button>
+    </td>
+  </tr>`).join('');
+}
+
+function removeTallyRow(name) {
+  if (!confirm(`Remove "${name}" from tally? Scores will be deleted.`)) return;
+  // Remove from manual list
+  DB.set('tallyDels', getTallyDels().filter(d => d !== name));
+  // Remove from registered accounts? No — just remove scores
+  const scores = getScores();
+  delete scores[name];
+  DB.set('scores', scores);
+  renderTally();
+  toast(`${name} removed`);
+}
+
+function scoreBar(val) {
+  const pct = val/5*100;
+  const color = val>=4 ? 'var(--green)' : val>=2.5 ? 'var(--gold)' : 'var(--red)';
+  return `<div class="score-bar-wrap">
+    <div class="score-bar-track"><div class="score-bar-fill" style="width:${pct}%;background:${color};"></div></div>
+    <span style="font-size:.78rem;color:${color};font-weight:700;">${val.toFixed(2)}</span>
+  </div>`;
+}
+
+function openScoreEntry(delegation) {
+  activeDelegateScore = delegation;
+  document.getElementById('score-modal-title').textContent = `Score — ${delegation}`;
+  const ds = (getScores()[delegation]) || { poi:[], speech:[], resolution:[] };
+
+  document.getElementById('score-modal-body').innerHTML = `
+    <div class="form-group">
+      <label>Category</label>
+      <select id="score-cat">
+        <option value="poi">Point of Information (POI)</option>
+        <option value="speech">Speech</option>
+        <option value="resolution">Resolution</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Score (1 – 5)</label>
+      <div style="display:flex;gap:.45rem;margin-bottom:.5rem;">
+        ${[1,2,3,4,5].map(n=>`
+          <div onclick="selectScore(${n})" id="sc-${n}"
+               style="width:2.6rem;height:2.6rem;border-radius:8px;border:2px solid var(--border);
+                      background:var(--surface2);display:flex;align-items:center;justify-content:center;
+                      cursor:pointer;font-weight:800;font-size:.95rem;transition:all .15s;">
+            ${n}
+          </div>`).join('')}
+      </div>
+      <input type="hidden" id="score-val" />
+      <div id="score-label" class="text-muted text-sm" style="margin-top:.25rem;"></div>
+    </div>
+    <div class="form-group">
+      <label>Note (optional)</label>
+      <input id="score-note" placeholder="Brief remark..." />
+    </div>
+    <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0;" />
+    <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:.5rem;">Previous Scores for ${delegation}</div>
+    ${['poi','speech','resolution'].map(cat => {
+      const arr = ds[cat] || [];
+      return arr.length
+        ? `<div style="margin-bottom:.4rem;"><strong style="font-size:.76rem;">${cat.toUpperCase()}:</strong> ${arr.map(s=>`<span class="tag">${s}</span>`).join(' ')} <span class="text-muted text-sm">avg ${avg(arr).toFixed(2)}</span></div>`
+        : '';
+    }).join('') || '<div class="text-muted text-sm">No entries yet</div>'}
+  `;
+  openModal('modal-add-score');
+}
+
+function selectScore(n) {
+  document.getElementById('score-val').value = n;
+  [1,2,3,4,5].forEach(i => {
+    const el = document.getElementById('sc-'+i);
+    if (i <= n) { el.style.background='var(--blue)'; el.style.borderColor='var(--blue)'; el.style.color='#fff'; }
+    else        { el.style.background='var(--surface2)'; el.style.borderColor='var(--border)'; el.style.color='var(--text)'; }
+  });
+  document.getElementById('score-label').textContent = {1:'Poor',2:'Fair',3:'Good',4:'Very Good',5:'Excellent'}[n];
+}
+
+function saveScoreEntry() {
+  if (!activeDelegateScore || !isChair()) return;
+  const cat = document.getElementById('score-cat').value;
+  const val = parseInt(document.getElementById('score-val').value);
+  if (!val || val<1 || val>5) { toast('Please select a score (1–5)'); return; }
+  const scores = getScores();
+  if (!scores[activeDelegateScore]) scores[activeDelegateScore] = { poi:[], speech:[], resolution:[] };
+  if (!scores[activeDelegateScore][cat]) scores[activeDelegateScore][cat] = [];
+  scores[activeDelegateScore][cat].push(val);
+  DB.set('scores', scores);
+  toast(`Score ${val} saved for ${activeDelegateScore}`);
+  closeModal('modal-add-score');
+  renderTally();
+  if (currentPage==='dashboard') renderDashboard();
+}
+
+function exportTally() {
+  const scores = getScores();
+  let csv = 'Delegation,POI Entries,POI Avg,Speech Entries,Speech Avg,Res Entries,Res Avg,Total Avg\n';
+  getAllTallyNames().forEach(d => {
+    const ds = scores[d]||{};
+    const poi=ds.poi||[], sp=ds.speech||[], re=ds.resolution||[];
+    const pa=avg(poi), sa=avg(sp), ra=avg(re), ta=avg([pa,sa,ra].filter(x=>x>0));
+    csv += `"${d}","${poi.join(',')}",${pa.toFixed(2)},"${sp.join(',')}",${sa.toFixed(2)},"${re.join(',')}",${ra.toFixed(2)},${ta.toFixed(2)}\n`;
+  });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download = 'mundp-tally.csv'; a.click();
+}
+
+// ═══════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════
+seed();
+</script>
+</body>
+</html>
