@@ -4,48 +4,51 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MUNDP — Digital Platform</title>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --navy:   #1B3358;
-      --navy2:  #12264A;
-      --bg:     #FFFFFF;
-      --page:   #F9F7F3;
-      --warm:   #F2F0EB;
-      --border: #DDD9D2;
-      --line:   #E8E4DE;
-      --text:   #18160F;
-      --muted:  #8C8880;
-      --green:  #1A5C38;
-      --red:    #8B1C1C;
-      --gold:   #886210;
-      --serif:  'Times New Roman', Times, Georgia, serif;
-      --sans:   'Manrope', system-ui, sans-serif;
-      --hero:   url('https://cdn.prod.website-files.com/66a3ed7fba757f6818a563b5/66bd01cffd6af77e67d98525_SFV_5848%20(1).jpg');
+      --blue:     #0356F0;
+      --blue2:    #0245C8;
+      --blue-lt:  #EBF1FF;
+      --blue-mid: #BDD0FA;
+      --bg:       #F0F4FB;
+      --surface:  #FFFFFF;
+      --navy:     #0C1A3D;
+      --muted:    #617098;
+      --border:   #D2DCEE;
+      --line:     #E5ECFA;
+      --green:    #0B7A40;
+      --red:      #C0152A;
+      --gold:     #9B6E00;
+      --serif:    'Times New Roman', Times, Georgia, serif;
+      --sans:     'Manrope', system-ui, sans-serif;
+      --hero:     url('https://cdn.prod.website-files.com/66a3ed7fba757f6818a563b5/66bd01cffd6af77e67d98525_SFV_5848%20(1).jpg');
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: var(--text); font-family: var(--serif); min-height: 100vh; -webkit-font-smoothing: antialiased; line-height: 1.6; }
+    body { background: var(--bg); color: var(--navy); font-family: var(--sans); min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
     /* ── forms ── */
-    .form-group { margin-bottom: 1.15rem; }
-    label { display: block; font-family: var(--sans); font-size: .68rem; color: var(--muted); margin-bottom: .35rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+    .form-group { margin-bottom: 1.1rem; }
+    label { display: block; font-size: .68rem; color: var(--muted); margin-bottom: .38rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
     input, textarea, select {
-      width: 100%; background: #fff; border: 1px solid var(--border);
-      border-radius: 2px; color: var(--text); padding: .65rem .9rem;
-      font-size: .95rem; font-family: var(--serif); transition: border-color .2s;
+      width: 100%; background: #fff; border: 1.5px solid var(--border);
+      border-radius: 6px; color: var(--navy); padding: .65rem .9rem;
+      font-size: .9rem; font-family: var(--sans); transition: border-color .2s, box-shadow .2s;
     }
-    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--navy); }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(3,86,240,.1); }
     textarea { resize: vertical; min-height: 80px; }
-
-    .err-box { border-left: 3px solid var(--red); background: #FEF6F6; color: var(--red); padding: .6rem .9rem; font-size: .85rem; margin-bottom: 1rem; display: none; font-family: var(--sans); }
+    .err-box { background: #FEF0F0; border-left: 3px solid var(--red); color: var(--red); padding: .62rem .9rem; font-size: .84rem; margin-bottom: 1rem; display: none; border-radius: 0 5px 5px 0; }
     .err-box.show { display: block; }
-    .ok-box  { border-left: 3px solid var(--green); background: #F3FBF5; color: var(--green); padding: .7rem .9rem; font-size: .85rem; margin-bottom: 1rem; display: none; font-family: var(--sans); }
+    .ok-box  { background: #EDFBF3; border-left: 3px solid var(--green); color: var(--green); padding: .7rem .9rem; font-size: .84rem; margin-bottom: 1rem; display: none; border-radius: 0 5px 5px 0; }
     .ok-box.show { display: block; }
 
-    /* ── login ── */
+    /* ════════════════════════════════
+       LOGIN
+    ════════════════════════════════ */
     #login-screen { min-height: 100vh; display: flex; }
 
+    /* hero — photo with blue overlay */
     .login-hero {
       flex: 1;
       background: var(--hero) center/cover no-repeat;
@@ -55,190 +58,211 @@
     }
     .login-hero::before {
       content: ''; position: absolute; inset: 0;
-      background: linear-gradient(170deg, rgba(10,20,40,.04) 0%, rgba(0,0,0,.65) 100%);
+      background: linear-gradient(145deg, rgba(3,86,240,.6) 0%, rgba(8,18,55,.85) 100%);
     }
-    .hero-quote { position: relative; z-index: 1; }
-    .hero-quote p {
-      font-family: var(--serif); font-size: 2.1rem; font-style: italic;
-      font-weight: normal; color: #fff; line-height: 1.42; max-width: 460px; margin-bottom: .6rem;
+    .hero-inner { position: relative; z-index: 1; }
+    .hero-pill {
+      display: inline-block; font-family: var(--sans); font-size: .68rem;
+      color: rgba(255,255,255,.75); letter-spacing: .1em; text-transform: uppercase;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22);
+      padding: .28rem .8rem; border-radius: 20px; margin-bottom: 1.25rem;
     }
-    .hero-quote span { font-family: var(--sans); font-size: .75rem; color: rgba(255,255,255,.55); letter-spacing: .09em; text-transform: uppercase; }
+    .hero-quote {
+      font-family: 'Playfair Display', Georgia, serif; font-style: italic;
+      font-size: 2.15rem; font-weight: 400; color: #fff;
+      line-height: 1.42; max-width: 460px; margin-bottom: .75rem;
+    }
+    .hero-source { font-family: var(--sans); font-size: .73rem; color: rgba(255,255,255,.5); letter-spacing: .08em; text-transform: uppercase; }
 
-    .login-panel { width: 460px; min-width: 400px; background: #fff; display: flex; flex-direction: column; border-left: 1px solid var(--border); overflow-y: auto; }
-    .login-panel-inner { padding: 3.25rem 3rem; display: flex; flex-direction: column; min-height: 100%; }
-    @media(max-width:768px){ .login-hero { display:none; } .login-panel { width:100%; min-width:0; border:none; } }
+    /* panel — white form side */
+    .login-panel { width: 460px; min-width: 400px; background: #fff; display: flex; flex-direction: column; overflow-y: auto; border-left: 1px solid rgba(3,86,240,.1); }
+    .login-panel-inner { padding: 3rem 2.75rem; display: flex; flex-direction: column; min-height: 100%; }
+    @media(max-width:768px){ .login-hero{display:none;} .login-panel{width:100%;min-width:0;border:none;} }
 
-    .login-logo { margin-bottom: 2.5rem; }
-    .login-logo img { height: 36px; display: block; }
-    .login-logo-name { font-family: var(--serif); font-size: 1.35rem; font-weight: normal; color: var(--text); margin-top: .45rem; letter-spacing: .02em; }
-    .login-logo-sub  { font-family: var(--sans); font-size: .7rem; color: var(--muted); margin-top: .1rem; }
+    .login-logo { display: flex; align-items: center; gap: .75rem; margin-bottom: 2.75rem; }
+    .login-logo img { height: 38px; }
+    .login-logo-name { font-size: 1rem; font-weight: 800; color: var(--navy); letter-spacing: -.01em; }
+    .login-logo-sub  { font-size: .64rem; color: var(--muted); margin-top: .1rem; }
 
-    .step-label { font-family: var(--sans); font-size: .68rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .85rem; }
+    /* role picker */
+    .step-lbl { font-size: .68rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: .75rem; }
+    .role-seg { display: flex; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 1.85rem; }
+    .role-opt { flex: 1; padding: .88rem 1rem; text-align: center; cursor: pointer; background: #FAFBFF; transition: background .18s; user-select: none; }
+    .role-opt + .role-opt { border-left: 1.5px solid var(--border); }
+    .role-opt:hover { background: var(--blue-lt); }
+    .role-opt.sel { background: var(--blue); }
+    .role-opt.sel .ro-name { color: #fff; }
+    .role-opt.sel .ro-desc { color: rgba(255,255,255,.65); }
+    .ro-name { font-weight: 700; font-size: .88rem; color: var(--navy); margin-bottom: .14rem; }
+    .ro-desc { font-size: .69rem; color: var(--muted); }
 
-    /* role picker — segmented control, not cards */
-    .role-picker { display: flex; border: 1px solid var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 2rem; }
-    .role-card { flex: 1; padding: .9rem 1rem; text-align: center; cursor: pointer; background: #FAFAF8; transition: background .18s; user-select: none; }
-    .role-card + .role-card { border-left: 1px solid var(--border); }
-    .role-card:hover { background: var(--warm); }
-    .role-card.selected { background: var(--navy); }
-    .role-card.selected .rc-title { color: #fff; }
-    .role-card.selected .rc-sub  { color: rgba(255,255,255,.6); }
-    .rc-title { font-family: var(--serif); font-size: .98rem; font-weight: normal; color: var(--text); margin-bottom: .12rem; }
-    .rc-sub   { font-family: var(--sans); font-size: .7rem; color: var(--muted); }
-
-    .auth-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 1.65rem; }
-    .auth-tab { flex: 1; text-align: center; padding: .55rem; font-family: var(--sans); font-size: .8rem; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all .18s; }
-    .auth-tab.active { color: var(--navy); border-bottom-color: var(--navy); }
+    /* auth tabs */
+    .auth-tabs { display: flex; border-bottom: 1.5px solid var(--line); margin-bottom: 1.5rem; }
+    .auth-tab { flex: 1; text-align: center; padding: .55rem; font-size: .8rem; font-weight: 700; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1.5px; transition: all .2s; }
+    .auth-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
 
     .auth-section  { display: none; }
     .auth-section.active  { display: block; }
     .chair-section { display: none; }
     .chair-section.active { display: block; }
 
-    .auth-heading { font-family: var(--serif); font-size: 1.5rem; font-weight: normal; margin-bottom: .3rem; line-height: 1.3; }
-    .auth-sub { font-family: var(--sans); font-size: .83rem; color: var(--muted); margin-bottom: 1.75rem; line-height: 1.55; }
+    .auth-heading { font-family: 'Playfair Display', Georgia, serif; font-size: 1.55rem; font-weight: 600; margin-bottom: .3rem; color: var(--navy); line-height: 1.3; }
+    .auth-sub { font-size: .83rem; color: var(--muted); margin-bottom: 1.65rem; line-height: 1.55; }
 
-    .login-btn { width: 100%; background: var(--navy); color: #fff; border: none; border-radius: 2px; padding: .78rem 1rem; font-family: var(--serif); font-size: .98rem; cursor: pointer; transition: background .2s; margin-top: .35rem; letter-spacing: .01em; }
-    .login-btn:hover { background: var(--navy2); }
-    .login-hint { font-family: var(--sans); font-size: .73rem; color: var(--muted); margin-top: .9rem; text-align: center; }
+    .login-btn { width: 100%; background: var(--blue); color: #fff; border: none; border-radius: 7px; padding: .78rem 1rem; font-size: .92rem; font-weight: 700; font-family: var(--sans); cursor: pointer; transition: background .2s, box-shadow .2s; margin-top: .35rem; box-shadow: 0 2px 8px rgba(3,86,240,.28); }
+    .login-btn:hover { background: var(--blue2); box-shadow: 0 4px 16px rgba(3,86,240,.38); }
+    .login-hint { font-size: .73rem; color: var(--muted); margin-top: .9rem; text-align: center; }
 
-    /* ── app shell ── */
+    /* ════════════════════════════════
+       APP
+    ════════════════════════════════ */
     #app { display: none; }
 
+    /* blue header */
     header {
-      background: #fff;
-      border-bottom: 2px solid var(--navy);
-      padding: 0 2.5rem;
-      display: flex; align-items: center; gap: 2rem;
+      background: var(--blue);
+      padding: 0 2.25rem;
+      display: flex; align-items: center; gap: 1.5rem;
       position: sticky; top: 0; z-index: 100;
       height: 56px;
+      box-shadow: 0 2px 10px rgba(3,86,240,.4);
     }
-    .logo { display: flex; align-items: center; gap: .7rem; text-decoration: none; }
-    .logo img { height: 26px; }
-    .logo-name { font-family: var(--serif); font-size: .98rem; font-weight: normal; color: var(--text); }
-    .logo-sub  { font-family: var(--sans); font-size: .58rem; color: var(--muted); margin-top: .08rem; }
+    .logo { display: flex; align-items: center; gap: .68rem; text-decoration: none; flex-shrink: 0; }
+    .logo img { height: 25px; filter: brightness(0) invert(1); opacity: .95; }
+    .logo-name { font-size: .9rem; font-weight: 800; color: #fff; letter-spacing: -.01em; line-height: 1.2; }
+    .logo-sub  { font-size: .57rem; color: rgba(255,255,255,.58); margin-top: .07rem; }
 
-    nav { display: flex; height: 100%; align-items: stretch; }
+    nav { display: flex; height: 100%; }
     .nav-btn {
-      background: none; border: none; color: var(--muted);
+      position: relative; background: none; border: none;
+      color: rgba(255,255,255,.72);
       padding: 0 1rem;
-      font-family: var(--sans); font-size: .82rem; font-weight: 600;
-      cursor: pointer; transition: color .18s;
-      border-bottom: 2px solid transparent; margin-bottom: -2px;
+      font-size: .82rem; font-weight: 600; font-family: var(--sans);
+      cursor: pointer; transition: color .18s, background .18s;
       display: flex; align-items: center;
     }
-    .nav-btn:hover { color: var(--text); }
-    .nav-btn.active { color: var(--navy); border-bottom-color: var(--navy); }
+    .nav-btn::after {
+      content: ''; position: absolute; bottom: 0; left: .75rem; right: .75rem;
+      height: 2px; background: rgba(255,255,255,.95); border-radius: 1px;
+      opacity: 0; transition: opacity .2s;
+    }
+    .nav-btn:hover { color: #fff; background: rgba(255,255,255,.08); }
+    .nav-btn.active { color: #fff; }
+    .nav-btn.active::after { opacity: 1; }
 
-    .header-right { margin-left: auto; display: flex; align-items: center; gap: 1rem; }
-    .session-badge { font-family: var(--sans); font-size: .75rem; color: var(--muted); }
-    .session-badge span { color: var(--text); font-weight: 700; }
-    .btn-logout { background: none; border: 1px solid var(--border); color: var(--muted); padding: .28rem .78rem; border-radius: 2px; font-family: var(--sans); font-size: .74rem; cursor: pointer; transition: all .18s; }
-    .btn-logout:hover { border-color: var(--red); color: var(--red); }
+    .header-right { margin-left: auto; display: flex; align-items: center; gap: .9rem; }
+    .session-badge { font-size: .75rem; color: rgba(255,255,255,.7); }
+    .session-badge span { color: #fff; font-weight: 700; }
+    .btn-logout { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); color: rgba(255,255,255,.88); padding: .29rem .78rem; border-radius: 5px; font-size: .74rem; font-family: var(--sans); font-weight: 600; cursor: pointer; transition: all .18s; }
+    .btn-logout:hover { background: rgba(255,255,255,.22); color: #fff; }
 
     /* ── page layout ── */
-    main { max-width: 1120px; margin: 0 auto; padding: 2.75rem 2rem; }
+    main { max-width: 1140px; margin: 0 auto; padding: 2.5rem 1.75rem; }
     .page { display: none; }
     .page.active { display: block; }
 
-    h1 { font-family: var(--serif); font-size: 1.75rem; font-weight: normal; margin-bottom: .2rem; color: var(--text); }
-    h2 { font-family: var(--serif); font-size: 1.15rem; font-weight: normal; margin-bottom: .9rem; color: var(--text); }
-    .subtitle { font-family: var(--sans); font-size: .83rem; color: var(--muted); margin-bottom: 0; }
-    .page-header { margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--line); display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
-    .page-header-left { flex: 1; }
+    .page-hdr { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.85rem; }
+    h1 { font-size: 1.5rem; font-weight: 800; color: var(--navy); letter-spacing: -.02em; margin-bottom: .18rem; }
+    h2 { font-size: .72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .85rem; }
+    .subtitle { font-size: .83rem; color: var(--muted); }
 
-    /* stat row — no boxing, just numbers in a row */
-    .stat-row { display: flex; gap: 0; margin-bottom: 2.5rem; border: 1px solid var(--line); border-radius: 3px; background: #fff; overflow: hidden; }
-    .stat-item { flex: 1; padding: 1.5rem 1.25rem; text-align: center; border-right: 1px solid var(--line); }
-    .stat-item:last-child { border-right: none; }
-    .stat-num   { font-family: var(--serif); font-size: 2.5rem; font-weight: normal; color: var(--navy); line-height: 1; }
-    .stat-label { font-family: var(--sans); font-size: .68rem; color: var(--muted); margin-top: .35rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; }
-    @media(max-width:600px) { .stat-row { flex-wrap: wrap; } .stat-item { min-width: 50%; border-bottom: 1px solid var(--line); } }
+    /* stat row */
+    .stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 2rem; }
+    @media(max-width:640px) { .stat-row { grid-template-columns: 1fr 1fr; } }
+    .stat-card { background: #fff; border-radius: 10px; padding: 1.45rem 1.25rem; box-shadow: 0 1px 3px rgba(3,86,240,.07), 0 4px 14px rgba(3,86,240,.04); }
+    .stat-num   { font-size: 2.4rem; font-weight: 800; color: var(--blue); line-height: 1; letter-spacing: -.025em; }
+    .stat-lbl   { font-size: .67rem; color: var(--muted); margin-top: .38rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
 
-    /* two-column layout for dashboard */
-    .col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-bottom: 2.5rem; }
-    @media(max-width:700px) { .col-2 { grid-template-columns: 1fr; } }
+    /* generic white card */
+    .card { background: #fff; border-radius: 10px; padding: 1.35rem; box-shadow: 0 1px 3px rgba(3,86,240,.06), 0 4px 12px rgba(3,86,240,.03); }
+    .card + .card { margin-top: .9rem; }
 
-    /* section block — minimal container */
-    .section { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 1.35rem 1.5rem; }
-    .section + .section { margin-top: 1rem; }
+    /* 2-col dashboard grid */
+    .dash-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 2rem; }
+    @media(max-width:700px) { .dash-cols { grid-template-columns: 1fr; } }
 
-    /* card — for inline items (recent resolutions, amendments in dashboard) */
-    .item-row { padding: .75rem 0; border-bottom: 1px solid var(--line); }
-    .item-row:last-child { border-bottom: none; padding-bottom: 0; }
-    .item-row:first-child { padding-top: 0; }
+    /* item rows inside cards */
+    .item { padding: .78rem 0; border-bottom: 1px solid var(--line); cursor: pointer; }
+    .item:last-child { border-bottom: none; padding-bottom: 0; }
+    .item:first-child { padding-top: 0; }
+    .item:hover { opacity: .8; }
+    .item-title { font-size: .9rem; font-weight: 600; color: var(--navy); margin-bottom: .18rem; line-height: 1.4; }
+    .item-meta  { font-size: .76rem; color: var(--muted); }
 
-    /* badges — restrained */
-    .badge { display: inline-block; font-family: var(--sans); font-size: .66rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: .14rem .48rem; border-radius: 2px; }
-    .badge-pending  { background: #EEF2FF; color: #3730A3; }
-    .badge-passed   { background: #ECFDF5; color: var(--green); }
-    .badge-failed   { background: #FEF2F2; color: var(--red); }
-    .badge-accepted { background: #ECFDF5; color: var(--green); }
-    .badge-rejected { background: #FEF2F2; color: var(--red); }
-    .badge-submitted{ background: #EEF2FF; color: #3730A3; }
+    /* badges */
+    .badge { display: inline-block; font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: .16rem .5rem; border-radius: 4px; }
+    .badge-pending  { background: #EEF3FF; color: #1E4CC7; }
+    .badge-passed   { background: #EAFAF2; color: var(--green); }
+    .badge-failed   { background: #FEEFEF; color: var(--red); }
+    .badge-accepted { background: #EAFAF2; color: var(--green); }
+    .badge-rejected { background: #FEEFEF; color: var(--red); }
+    .badge-submitted{ background: #EEF3FF; color: #1E4CC7; }
 
     /* buttons */
-    .btn { display: inline-flex; align-items: center; gap: .3rem; padding: .44rem .9rem; border-radius: 2px; font-family: var(--sans); font-size: .8rem; font-weight: 600; cursor: pointer; border: none; transition: all .18s; }
-    .btn-primary { background: var(--navy); color: #fff; }
-    .btn-primary:hover { background: var(--navy2); }
-    .btn-success { background: transparent; color: var(--green); border: 1px solid currentColor; }
-    .btn-success:hover { background: #ECFDF5; }
-    .btn-danger  { background: transparent; color: var(--red); border: 1px solid currentColor; }
-    .btn-danger:hover  { background: #FEF2F2; }
-    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
-    .btn-ghost:hover { background: var(--warm); }
-    .btn-sm { padding: .24rem .58rem; font-size: .74rem; }
+    .btn { display: inline-flex; align-items: center; gap: .3rem; padding: .46rem .95rem; border-radius: 7px; font-size: .82rem; font-weight: 700; cursor: pointer; border: none; transition: all .18s; font-family: var(--sans); }
+    .btn-primary { background: var(--blue); color: #fff; }
+    .btn-primary:hover { background: var(--blue2); }
+    .btn-success { background: #EAFAF2; color: var(--green); border: 1px solid #A7EDCA; }
+    .btn-success:hover { background: #D3F5E4; }
+    .btn-danger  { background: #FEEFEF; color: var(--red); border: 1px solid #F5B7B7; }
+    .btn-danger:hover  { background: #FDD8D8; }
+    .btn-ghost { background: #fff; color: var(--navy); border: 1.5px solid var(--border); }
+    .btn-ghost:hover { background: var(--blue-lt); border-color: var(--blue-mid); }
+    .btn-sm { padding: .26rem .6rem; font-size: .75rem; border-radius: 5px; }
 
-    /* filter bar */
-    .filter-bar { display: flex; gap: .35rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
-    .filter-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: .24rem .7rem; border-radius: 2px; font-family: var(--sans); font-size: .72rem; font-weight: 600; cursor: pointer; transition: all .18s; }
-    .filter-btn.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+    /* filter pills */
+    .filter-bar { display: flex; gap: .35rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+    .filter-btn { background: #fff; border: 1.5px solid var(--border); color: var(--muted); padding: .25rem .72rem; border-radius: 20px; font-size: .72rem; font-weight: 700; cursor: pointer; transition: all .2s; font-family: var(--sans); }
+    .filter-btn.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .filter-btn:hover:not(.active) { border-color: var(--blue-mid); color: var(--blue); }
 
     /* tables */
     .table-wrap { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; }
-    th { font-family: var(--sans); text-align: left; font-size: .66rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); padding: .72rem 1rem; border-bottom: 1.5px solid var(--border); white-space: nowrap; font-weight: 700; }
-    td { padding: .72rem 1rem; border-bottom: 1px solid var(--line); font-size: .88rem; vertical-align: middle; }
+    th { text-align: left; font-size: .67rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); padding: .72rem 1rem; border-bottom: 1.5px solid var(--border); white-space: nowrap; font-weight: 700; }
+    td { padding: .7rem 1rem; border-bottom: 1px solid var(--line); font-size: .86rem; vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #FAFAF8; }
+    tr:hover td { background: #F5F8FF; }
 
-    /* resolutions */
-    .res-card { background: #fff; border: 1px solid var(--line); border-radius: 3px; margin-bottom: .65rem; }
+    /* resolution cards */
+    .res-card { background: #fff; border-radius: 9px; margin-bottom: .7rem; overflow: hidden; box-shadow: 0 1px 3px rgba(3,86,240,.06), 0 2px 8px rgba(3,86,240,.03); border: 1px solid var(--line); }
+    .res-card[data-status="pending"] { border-left: 3px solid var(--blue); }
+    .res-card[data-status="passed"]  { border-left: 3px solid var(--green); }
+    .res-card[data-status="failed"]  { border-left: 3px solid var(--red); }
     .res-header { display: flex; align-items: center; justify-content: space-between; padding: .95rem 1.2rem; cursor: pointer; transition: background .15s; gap: 1rem; }
-    .res-header:hover { background: #FAFAF8; }
-    .res-title { font-family: var(--serif); font-weight: normal; font-size: 1rem; flex: 1; line-height: 1.4; }
-    .res-meta { display: flex; align-items: center; gap: .6rem; flex-shrink: 0; }
-    .res-body { padding: 1.2rem 1.35rem; border-top: 1px solid var(--line); display: none; background: #FAFAF8; }
+    .res-header:hover { background: #F5F8FF; }
+    .res-title { font-weight: 700; font-size: .92rem; flex: 1; line-height: 1.4; color: var(--navy); }
+    .res-meta  { display: flex; align-items: center; gap: .6rem; flex-shrink: 0; }
+    .res-body  { padding: 1.2rem 1.35rem; border-top: 1px solid var(--line); display: none; background: #F7FAFF; }
     .res-body.open { display: block; }
-    .res-text { font-family: var(--serif); color: var(--muted); font-size: .92rem; line-height: 1.78; white-space: pre-wrap; margin-bottom: 1rem; }
+    .res-text  { font-family: var(--serif); color: var(--muted); font-size: .92rem; line-height: 1.78; white-space: pre-wrap; margin-bottom: 1rem; }
     .res-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
 
-    /* amendments */
-    .amend-card { background: #FAFAF8; border: 1px solid var(--line); border-radius: 3px; padding: 1rem 1.1rem; margin-bottom: .6rem; }
-    .amend-meta { display: flex; align-items: center; gap: .55rem; margin-bottom: .45rem; flex-wrap: wrap; }
-    .amend-clause { font-family: var(--sans); font-size: .75rem; color: var(--gold); font-weight: 700; }
-    .amend-delegate-label { font-family: var(--sans); font-size: .75rem; color: var(--muted); }
-    .amend-text { font-family: var(--serif); font-size: .9rem; line-height: 1.68; margin-bottom: .6rem; }
+    /* amendment cards */
+    .amend-card { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 1rem 1.15rem; margin-bottom: .6rem; }
+    .amend-meta { display: flex; align-items: center; gap: .55rem; margin-bottom: .48rem; flex-wrap: wrap; }
+    .amend-clause { font-size: .76rem; color: var(--gold); font-weight: 700; }
+    .amend-delegate-label { font-size: .76rem; color: var(--muted); }
+    .amend-text { font-family: var(--serif); font-size: .9rem; line-height: 1.68; margin-bottom: .65rem; }
     .amend-actions { display: flex; gap: .4rem; }
-    .tag { font-family: var(--sans); display: inline-block; background: #fff; border: 1px solid var(--border); border-radius: 2px; font-size: .67rem; padding: .09rem .38rem; color: var(--muted); font-weight: 600; }
+    .tag { display: inline-block; background: var(--blue-lt); border: 1px solid var(--blue-mid); border-radius: 4px; font-size: .67rem; padding: .1rem .38rem; color: var(--blue2); font-weight: 700; }
 
     /* modals */
-    .overlay { position: fixed; inset: 0; background: rgba(24,22,14,.4); z-index: 200; display: none; align-items: center; justify-content: center; padding: 1.5rem; }
+    .overlay { position: fixed; inset: 0; background: rgba(8,18,55,.45); z-index: 200; display: none; align-items: center; justify-content: center; padding: 1.25rem; backdrop-filter: blur(3px); }
     .overlay.open { display: flex; }
-    .modal { background: #fff; border: 1px solid var(--border); border-radius: 3px; width: 100%; max-width: 540px; padding: 1.85rem 2rem; max-height: 90vh; overflow-y: auto; box-shadow: 0 12px 48px rgba(0,0,0,.13); }
-    .modal-title { font-family: var(--serif); font-size: 1.2rem; font-weight: normal; margin-bottom: 1.35rem; }
-    .modal-actions { display: flex; gap: .5rem; justify-content: flex-end; margin-top: 1.35rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+    .modal { background: #fff; border-radius: 12px; width: 100%; max-width: 540px; padding: 1.85rem 2rem; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(3,86,240,.18), 0 4px 16px rgba(0,0,0,.08); }
+    .modal-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 1.35rem; color: var(--navy); }
+    .modal-actions { display: flex; gap: .5rem; justify-content: flex-end; margin-top: 1.3rem; padding-top: 1rem; border-top: 1px solid var(--line); }
 
     /* toast */
-    #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 300; background: var(--text); color: #fff; padding: .65rem 1.15rem; border-radius: 2px; font-family: var(--sans); font-size: .8rem; font-weight: 600; transform: translateY(5rem); opacity: 0; transition: all .28s; pointer-events: none; }
+    #toast { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 300; background: var(--navy); color: #fff; padding: .65rem 1.15rem; border-radius: 7px; font-size: .82rem; font-weight: 700; transform: translateY(5rem); opacity: 0; transition: all .28s; pointer-events: none; box-shadow: 0 4px 20px rgba(0,0,0,.18); }
     #toast.show { transform: translateY(0); opacity: 1; }
 
-    /* info banners */
-    .info-banner { border-radius: 2px; padding: .72rem 1.1rem; font-family: var(--sans); font-size: .84rem; margin-bottom: 1.4rem; }
-    .info-banner.blue { background: #EFF4FF; border-left: 3px solid #4B6EBD; color: #2D4A8A; }
-    .info-banner strong { color: var(--text); }
+    .info-banner { border-radius: 7px; padding: .72rem 1.1rem; font-size: .84rem; margin-bottom: 1.4rem; }
+    .info-banner.blue { background: var(--blue-lt); border: 1px solid var(--blue-mid); color: var(--blue2); }
+    .info-banner strong { color: var(--navy); }
 
-    /* utility */
+    /* utils */
     .flex-between { display: flex; align-items: center; justify-content: space-between; }
     .flex { display: flex; align-items: center; }
     .gap-1 { gap: .5rem; }
@@ -246,59 +270,63 @@
     .mb-2 { margin-bottom: 1.1rem; }
     .mt-2 { margin-top: 1.5rem; }
     .text-muted { color: var(--muted); }
-    .text-sm { font-family: var(--sans); font-size: .78rem; }
-    .empty { text-align: center; padding: 3rem; font-family: var(--sans); color: var(--muted); font-size: .86rem; }
+    .text-sm { font-size: .78rem; }
+    .empty { text-align: center; padding: 3rem; color: var(--muted); font-size: .86rem; }
     .rank-1 { color: var(--gold); font-weight: 800; }
     .rank-2 { color: #94a3b8; font-weight: 700; }
     .rank-3 { color: #b45309; font-weight: 700; }
     .score-bar-wrap { display: flex; align-items: center; gap: .4rem; justify-content: center; }
-    .score-bar-track { width: 48px; height: 4px; background: var(--warm); border-radius: 2px; overflow: hidden; }
+    .score-bar-track { width: 48px; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
     .score-bar-fill  { height: 100%; border-radius: 2px; }
-
-    /* tally page inputs */
-    .tally-add-row td { background: var(--warm); }
-    .tally-add-row input { padding: .35rem .6rem; font-size: .88rem; }
+    .tally-add-row td { background: var(--blue-lt); }
+    .tally-add-row input { padding: .35rem .6rem; }
   </style>
 </head>
 <body>
 
-<!-- ══════════════════════
+<!-- ════════════════════════════════════════
      LOGIN
-══════════════════════ -->
+════════════════════════════════════════ -->
 <div id="login-screen">
+
+  <!-- left — photo + blue overlay -->
   <div class="login-hero">
-    <div class="hero-quote">
-      <p>26 Years of Commitment to Development</p>
-      <span>Koc School &nbsp;·&nbsp; Istanbul, Turkey</span>
+    <div class="hero-inner">
+      <div class="hero-pill">Koc School &nbsp;·&nbsp; Istanbul</div>
+      <div class="hero-quote">"26 Years of Commitment to Development"</div>
+      <div class="hero-source">MUNDP &nbsp;—&nbsp; Model United Nations</div>
     </div>
   </div>
 
+  <!-- right — white form panel -->
   <div class="login-panel">
     <div class="login-panel-inner">
 
       <div class="login-logo">
         <img src="https://cdn.prod.website-files.com/66a3ed7fba757f6818a563b5/66bc917fc59fecbef5777684_mundp%20(1).svg" alt="MUNDP" />
-        <div class="login-logo-name">MUNDP</div>
-        <div class="login-logo-sub">Digital Platform</div>
-      </div>
-
-      <div class="step-label">I am a</div>
-      <div class="role-picker">
-        <div class="role-card" id="role-chair" onclick="selectRole('chair')">
-          <div class="rc-title">Chair</div>
-          <div class="rc-sub">Full access</div>
-        </div>
-        <div class="role-card" id="role-delegate" onclick="selectRole('delegate')">
-          <div class="rc-title">Delegate</div>
-          <div class="rc-sub">View &amp; amend</div>
+        <div>
+          <div class="login-logo-name">MUNDP</div>
+          <div class="login-logo-sub">Digital Platform</div>
         </div>
       </div>
 
-      <!-- CHAIR -->
+      <div class="step-lbl">I am a</div>
+      <div class="role-seg">
+        <div class="role-opt" id="role-chair" onclick="selectRole('chair')">
+          <div class="ro-name">Chair</div>
+          <div class="ro-desc">Full access</div>
+        </div>
+        <div class="role-opt" id="role-delegate" onclick="selectRole('delegate')">
+          <div class="ro-name">Delegate</div>
+          <div class="ro-desc">View &amp; amend</div>
+        </div>
+      </div>
+
+      <!-- chair -->
       <div class="chair-section" id="chair-section">
         <div class="auth-heading">Chair Sign In</div>
-        <div class="auth-sub">Enter your chair access code to continue.</div>
-        <div class="err-box" id="err-chair">That access code is incorrect. Please try again.</div>
+        <div class="auth-sub">Enter your access code to continue.</div>
+        <div class="err-box" id="err-chair">That access code is incorrect.</div>
         <div class="form-group">
           <label>Access Code</label>
           <input type="password" id="chair-code" placeholder="••••••••"
@@ -307,18 +335,17 @@
         <button class="login-btn" onclick="loginChair()">Sign In</button>
       </div>
 
-      <!-- DELEGATE -->
+      <!-- delegate -->
       <div class="auth-section" id="delegate-section">
         <div class="auth-tabs">
           <div class="auth-tab active" id="tab-login"    onclick="switchTab('login')">Sign In</div>
           <div class="auth-tab"        id="tab-register" onclick="switchTab('register')">Register</div>
         </div>
 
-        <!-- Sign In -->
         <div class="auth-section active" id="del-login-form">
           <div class="auth-heading">Welcome back</div>
           <div class="auth-sub">Sign in with your delegate account.</div>
-          <div class="err-box" id="err-del-login">Email or password is incorrect.</div>
+          <div class="err-box" id="err-del-login"></div>
           <div class="form-group">
             <label>Email</label>
             <input type="email" id="del-login-email" placeholder="your@email.com"
@@ -330,10 +357,9 @@
                    onkeydown="if(event.key==='Enter')loginDelegate()" />
           </div>
           <button class="login-btn" onclick="loginDelegate()">Sign In</button>
-          <div class="login-hint">No account yet? <span style="color:var(--navy);cursor:pointer;font-weight:700;" onclick="switchTab('register')">Register here</span></div>
+          <div class="login-hint">No account yet? <span style="color:var(--blue);cursor:pointer;font-weight:700;" onclick="switchTab('register')">Register here</span></div>
         </div>
 
-        <!-- Register -->
         <div class="auth-section" id="del-register-form">
           <div class="auth-heading">Create account</div>
           <div class="auth-sub">Register to submit amendments and view resolutions.</div>
@@ -356,20 +382,19 @@
                    onkeydown="if(event.key==='Enter')registerDelegate()" />
           </div>
           <button class="login-btn" onclick="registerDelegate()">Create Account</button>
-          <div class="login-hint">Already registered? <span style="color:var(--navy);cursor:pointer;font-weight:700;" onclick="switchTab('login')">Sign in</span></div>
+          <div class="login-hint">Already registered? <span style="color:var(--blue);cursor:pointer;font-weight:700;" onclick="switchTab('login')">Sign in</span></div>
         </div>
 
-        <!-- Confirmation -->
         <div class="auth-section" id="del-confirm-screen">
-          <div style="text-align:center;padding:1.75rem 0 1rem;">
-            <div style="width:56px;height:56px;border-radius:50%;background:#ECFDF5;border:1.5px solid #6EE7B7;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.4rem;color:var(--green);">&#10003;</div>
-            <div style="font-family:var(--serif);font-size:1.35rem;font-weight:normal;margin-bottom:.5rem;">Account created</div>
-            <div style="font-family:var(--sans);font-size:.83rem;color:var(--muted);margin-bottom:.4rem;">Your delegate account is ready.</div>
-            <div id="confirm-delegation" style="font-family:var(--serif);font-size:1rem;color:var(--text);margin-bottom:.2rem;"></div>
-            <div id="confirm-email"      style="font-family:var(--sans);font-size:.8rem;color:var(--muted);margin-bottom:1.85rem;"></div>
+          <div style="text-align:center;padding:2rem 0 1rem;">
+            <div style="width:58px;height:58px;border-radius:50%;background:var(--blue-lt);border:2px solid var(--blue-mid);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:1.5rem;color:var(--blue);">&#10003;</div>
+            <div style="font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:600;margin-bottom:.5rem;color:var(--navy);">Account created</div>
+            <div style="font-size:.83rem;color:var(--muted);margin-bottom:.35rem;">Your delegate account is ready.</div>
+            <div id="confirm-delegation" style="font-size:.95rem;font-weight:700;color:var(--navy);margin-bottom:.2rem;"></div>
+            <div id="confirm-email"      style="font-size:.8rem;color:var(--muted);margin-bottom:1.85rem;"></div>
           </div>
           <button class="login-btn" onclick="goToSignIn()">Sign In Now</button>
-          <div class="login-hint" style="margin-top:.85rem;">Your email has been pre-filled below.</div>
+          <div class="login-hint" style="margin-top:.85rem;">Your email has been pre-filled.</div>
         </div>
       </div>
 
@@ -377,10 +402,11 @@
   </div>
 </div>
 
-<!-- ══════════════════════
+<!-- ════════════════════════════════════════
      APP
-══════════════════════ -->
+════════════════════════════════════════ -->
 <div id="app">
+
   <header>
     <a class="logo" href="#">
       <img src="https://cdn.prod.website-files.com/66a3ed7fba757f6818a563b5/66bc917fc59fecbef5777684_mundp%20(1).svg" alt="MUNDP" />
@@ -400,8 +426,8 @@
 
     <!-- DASHBOARD -->
     <div class="page" id="page-dashboard">
-      <div class="page-header">
-        <div class="page-header-left">
+      <div class="page-hdr">
+        <div>
           <h1>Dashboard</h1>
           <p class="subtitle">Conference overview</p>
         </div>
@@ -409,19 +435,19 @@
 
       <div class="stat-row" id="dash-stats"></div>
 
-      <div class="col-2">
+      <div class="dash-cols">
         <div>
           <h2>Recent Resolutions</h2>
-          <div class="section" id="dash-resolutions"></div>
+          <div class="card" id="dash-resolutions"></div>
         </div>
         <div>
           <h2>Pending Amendments</h2>
-          <div class="section" id="dash-amendments"></div>
+          <div class="card" id="dash-amendments"></div>
         </div>
       </div>
 
       <h2>Delegate Leaderboard</h2>
-      <div class="section">
+      <div class="card">
         <div class="table-wrap">
           <table>
             <thead><tr>
@@ -439,12 +465,12 @@
 
     <!-- RESOLUTIONS -->
     <div class="page" id="page-resolutions">
-      <div class="page-header">
-        <div class="page-header-left">
+      <div class="page-hdr">
+        <div>
           <h1>Resolutions</h1>
           <p class="subtitle" id="res-subtitle">Chair-proposed resolutions and voting outcomes</p>
         </div>
-        <button class="btn btn-primary" id="btn-add-res" onclick="openModal('modal-add-res')" style="display:none;">Add Resolution</button>
+        <button class="btn btn-primary" id="btn-add-res" onclick="openModal('modal-add-res')" style="display:none;">+ Add Resolution</button>
       </div>
       <div class="filter-bar">
         <button class="filter-btn active" onclick="filterRes('all',this)">All</button>
@@ -457,12 +483,12 @@
 
     <!-- AMENDMENTS -->
     <div class="page" id="page-amendments">
-      <div class="page-header">
-        <div class="page-header-left">
+      <div class="page-hdr">
+        <div>
           <h1>Amendments</h1>
-          <p class="subtitle" id="amend-subtitle">Proposed changes to active resolutions</p>
+          <p class="subtitle">Proposed changes to active resolutions</p>
         </div>
-        <button class="btn btn-primary" id="btn-add-amend" onclick="openModal('modal-add-amend')" style="display:none;">Submit Amendment</button>
+        <button class="btn btn-primary" id="btn-add-amend" onclick="openModal('modal-add-amend')" style="display:none;">+ Submit Amendment</button>
       </div>
       <div id="amend-info-banner" class="info-banner blue" style="display:none;"></div>
       <div class="filter-bar" id="amend-filter-bar">
@@ -476,15 +502,15 @@
 
     <!-- TALLY -->
     <div class="page" id="page-tally">
-      <div class="page-header">
-        <div class="page-header-left">
+      <div class="page-hdr">
+        <div>
           <h1>Delegate Tally</h1>
           <p class="subtitle">Track scores per delegation (1–5)</p>
         </div>
         <button class="btn btn-ghost btn-sm" onclick="exportTally()">Export CSV</button>
       </div>
 
-      <div class="section mb-2" style="margin-bottom:1rem;">
+      <div class="card mb-2" style="margin-bottom:1rem;">
         <div style="display:flex;gap:.65rem;align-items:flex-end;">
           <div class="form-group" style="flex:1;margin:0;">
             <label>Add Delegation</label>
@@ -495,7 +521,7 @@
       </div>
 
       <div style="display:flex;gap:.65rem;margin-bottom:1rem;align-items:center;">
-        <input id="tally-search" style="width:200px;" placeholder="Search delegations…" oninput="renderTally()" />
+        <input id="tally-search" style="width:210px;" placeholder="Search delegations…" oninput="renderTally()" />
         <select id="tally-sort" onchange="renderTally()" style="width:160px;">
           <option value="name">Sort: Name</option>
           <option value="total">Sort: Total</option>
@@ -505,7 +531,7 @@
         </select>
       </div>
 
-      <div class="section">
+      <div class="card">
         <div class="table-wrap">
           <table>
             <thead><tr>
@@ -530,7 +556,6 @@
 </div>
 
 <!-- MODALS -->
-
 <div class="overlay" id="modal-add-res" onclick="bgClose(event,'modal-add-res')">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-title">Add Resolution</div>
@@ -603,14 +628,8 @@
 const _mem = {};
 const _ls  = (() => { try { localStorage.setItem('__t','1'); localStorage.removeItem('__t'); return true; } catch { return false; } })();
 const DB = {
-  get: k => {
-    if (_ls) { try { const v = localStorage.getItem('mundp3_'+k); return v !== null ? JSON.parse(v) : null; } catch {} }
-    return k in _mem ? _mem[k] : null;
-  },
-  set: (k, v) => {
-    if (_ls) { try { localStorage.setItem('mundp3_'+k, JSON.stringify(v)); return; } catch {} }
-    _mem[k] = v;
-  },
+  get: k => { if (_ls) { try { const v = localStorage.getItem('mundp3_'+k); return v !== null ? JSON.parse(v) : null; } catch {} } return k in _mem ? _mem[k] : null; },
+  set: (k, v) => { if (_ls) { try { localStorage.setItem('mundp3_'+k, JSON.stringify(v)); return; } catch {} } _mem[k] = v; },
 };
 
 function uid()  { return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
@@ -636,15 +655,13 @@ const getScores      = () => DB.get('scores')      || {};
 const getSettings    = () => DB.get('settings')    || {};
 
 function getAllTallyNames() {
-  const merged = [...new Set([...getDelegates().map(d => d.delegation), ...getTallyDels()])];
-  return merged.sort((a,b) => a.localeCompare(b));
+  return [...new Set([...getDelegates().map(d=>d.delegation), ...getTallyDels()])].sort((a,b)=>a.localeCompare(b));
 }
 
 // ── SESSION ──
 let session = null;
 const isChair    = () => session?.role === 'chair';
 const isDelegate = () => session?.role === 'delegate';
-
 function persistSession(s) { DB.set('session', s || null); }
 
 // ── LOGIN ──
@@ -652,14 +669,14 @@ let selectedRole = null;
 
 function selectRole(role) {
   selectedRole = role;
-  document.getElementById('role-chair').classList.toggle('selected', role === 'chair');
-  document.getElementById('role-delegate').classList.toggle('selected', role === 'delegate');
+  document.getElementById('role-chair').classList.toggle('sel', role === 'chair');
+  document.getElementById('role-delegate').classList.toggle('sel', role === 'delegate');
   document.getElementById('chair-section').classList.toggle('active', role === 'chair');
   document.getElementById('delegate-section').classList.toggle('active', role === 'delegate');
-  clearLoginErrors();
+  clearErrors();
 }
 
-let lastRegisteredEmail = '';
+let lastRegEmail = '';
 
 function switchTab(tab) {
   ['del-login-form','del-register-form','del-confirm-screen'].forEach(id => document.getElementById(id).classList.remove('active'));
@@ -670,10 +687,10 @@ function switchTab(tab) {
   if (tab === 'login')    document.getElementById('del-login-form').classList.add('active');
   if (tab === 'register') document.getElementById('del-register-form').classList.add('active');
   if (tab === 'confirm')  document.getElementById('del-confirm-screen').classList.add('active');
-  clearLoginErrors();
+  clearErrors();
 }
 
-function clearLoginErrors() {
+function clearErrors() {
   ['err-chair','err-del-login','err-del-reg'].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.classList.remove('show'); el.textContent = ''; }
@@ -681,7 +698,7 @@ function clearLoginErrors() {
 }
 
 function goToSignIn() {
-  document.getElementById('del-login-email').value = lastRegisteredEmail;
+  document.getElementById('del-login-email').value = lastRegEmail;
   switchTab('login');
   document.getElementById('del-login-pw').focus();
 }
@@ -715,31 +732,26 @@ function registerDelegate() {
     const email      = document.getElementById('reg-email').value.trim().toLowerCase();
     const pw         = document.getElementById('reg-pw').value;
     const pw2        = document.getElementById('reg-pw2').value;
-    if (!delegation || !email || !pw || !pw2) { errEl.textContent = 'All fields are required.'; errEl.classList.add('show'); return; }
-    if (pw.length < 6)  { errEl.textContent = 'Password must be at least 6 characters.'; errEl.classList.add('show'); return; }
-    if (pw !== pw2)     { errEl.textContent = 'Passwords do not match.'; errEl.classList.add('show'); return; }
+    if (!delegation||!email||!pw||!pw2) { errEl.textContent='All fields are required.'; errEl.classList.add('show'); return; }
+    if (pw.length < 6) { errEl.textContent='Password must be at least 6 characters.'; errEl.classList.add('show'); return; }
+    if (pw !== pw2)    { errEl.textContent='Passwords do not match.'; errEl.classList.add('show'); return; }
     const delegates = getDelegates();
-    if (delegates.find(d => d.email.toLowerCase() === email)) {
-      errEl.textContent = 'This email is already registered — try signing in instead.';
+    if (delegates.find(d=>d.email.toLowerCase()===email)) {
+      errEl.textContent='This email is already registered — try signing in.';
       errEl.classList.add('show');
       document.getElementById('del-login-email').value = email;
       return;
     }
-    const newAccount = { id: uid(), email, password: pw, delegation, createdAt: Date.now() };
-    delegates.push(newAccount);
+    const newAcc = { id:uid(), email, password:pw, delegation, createdAt:Date.now() };
+    delegates.push(newAcc);
     DB.set('delegates', delegates);
-    if (!getDelegates().find(d => d.email === email)) {
-      errEl.textContent = 'Could not save your account. Storage may be disabled.';
-      errEl.classList.add('show'); return;
-    }
-    ['reg-delegation','reg-email','reg-pw','reg-pw2'].forEach(id => document.getElementById(id).value = '');
-    lastRegisteredEmail = email;
+    if (!getDelegates().find(d=>d.email===email)) { errEl.textContent='Could not save account. Storage may be disabled.'; errEl.classList.add('show'); return; }
+    ['reg-delegation','reg-email','reg-pw','reg-pw2'].forEach(id => document.getElementById(id).value='');
+    lastRegEmail = email;
     document.getElementById('confirm-delegation').textContent = delegation;
     document.getElementById('confirm-email').textContent = email;
     switchTab('confirm');
-  } catch(e) {
-    errEl.textContent = 'Error: ' + e.message; errEl.classList.add('show');
-  }
+  } catch(e) { errEl.textContent='Error: '+e.message; errEl.classList.add('show'); }
 }
 
 function startApp() {
@@ -750,22 +762,21 @@ function startApp() {
 }
 
 function logout() {
-  session = null; selectedRole = null;
-  persistSession(null);
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('app').style.display = 'none';
-  ['chair-code','del-login-email','del-login-pw'].forEach(id => document.getElementById(id).value = '');
+  session=null; selectedRole=null; persistSession(null);
+  document.getElementById('login-screen').style.display='flex';
+  document.getElementById('app').style.display='none';
+  ['chair-code','del-login-email','del-login-pw'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('chair-section').classList.remove('active');
   document.getElementById('delegate-section').classList.remove('active');
-  document.getElementById('role-chair').classList.remove('selected');
-  document.getElementById('role-delegate').classList.remove('selected');
+  document.getElementById('role-chair').classList.remove('sel');
+  document.getElementById('role-delegate').classList.remove('sel');
   switchTab('login');
 }
 
 // ── HEADER / NAV ──
 function renderHeader() {
   const s = getSettings();
-  document.getElementById('hdr-name').textContent = s.name || 'MUNDP';
+  document.getElementById('hdr-name').textContent = s.name||'MUNDP';
   document.getElementById('hdr-sub').textContent  = s.committee ? `${s.committee} — ${s.topic||''}` : 'Koc Okulu MUN';
   document.getElementById('session-badge').innerHTML = isChair()
     ? 'Signed in as <span>Chair</span>'
@@ -788,8 +799,8 @@ let currentPage = '';
 function goto(page) {
   const allowed = isChair() ? CHAIR_PAGES : DELEGATE_PAGES;
   if (!allowed.includes(page)) return;
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+page).classList.add('active');
   const btn = document.getElementById('nav-'+page);
   if (btn) btn.classList.add('active');
@@ -801,12 +812,12 @@ function avg(arr) { if (!arr||!arr.length) return 0; return arr.reduce((a,b)=>a+
 
 function toast(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg; el.classList.add('show');
+  el.textContent=msg; el.classList.add('show');
   setTimeout(()=>el.classList.remove('show'), 2500);
 }
 
 function openModal(id) {
-  if (id === 'modal-add-amend') {
+  if (id==='modal-add-amend') {
     const ress = getResolutions().filter(r=>r.status==='pending');
     document.getElementById('amend-res-inp').innerHTML = ress.length
       ? ress.map(r=>`<option value="${r.id}">${r.title}</option>`).join('')
@@ -819,52 +830,44 @@ function bgClose(e,id)  { if (e.target.id===id) closeModal(id); }
 
 // ── DASHBOARD ──
 function renderDashboard() {
-  const ress   = getResolutions();
-  const amends = getAmendments();
-  const dels   = getAllTallyNames();
-
+  const ress=getResolutions(), amends=getAmendments(), dels=getAllTallyNames();
   document.getElementById('dash-stats').innerHTML = `
-    <div class="stat-item"><div class="stat-num">${dels.length}</div><div class="stat-label">Delegations</div></div>
-    <div class="stat-item"><div class="stat-num">${ress.length}</div><div class="stat-label">Resolutions</div></div>
-    <div class="stat-item"><div class="stat-num">${amends.filter(a=>a.status==='submitted').length}</div><div class="stat-label">Pending Amendments</div></div>
-    <div class="stat-item"><div class="stat-num" style="color:var(--green)">${ress.filter(r=>r.status==='passed').length}</div><div class="stat-label">Passed</div></div>
+    <div class="stat-card"><div class="stat-num">${dels.length}</div><div class="stat-lbl">Delegations</div></div>
+    <div class="stat-card"><div class="stat-num">${ress.length}</div><div class="stat-lbl">Resolutions</div></div>
+    <div class="stat-card"><div class="stat-num">${amends.filter(a=>a.status==='submitted').length}</div><div class="stat-lbl">Pending Amendments</div></div>
+    <div class="stat-card"><div class="stat-num" style="color:var(--green)">${ress.filter(r=>r.status==='passed').length}</div><div class="stat-lbl">Passed</div></div>
   `;
 
   const rEl = document.getElementById('dash-resolutions');
-  if (!ress.length) { rEl.innerHTML = '<div class="empty">No resolutions yet</div>'; }
-  else {
-    rEl.innerHTML = ress.slice(-4).reverse().map(r=>`
-      <div class="item-row" style="cursor:pointer" onclick="goto('resolutions')">
-        <div class="flex-between">
-          <span style="font-family:var(--serif);font-size:.95rem;">${r.title}</span>
-          <span class="badge badge-${r.status}">${r.status}</span>
-        </div>
-        <div class="text-muted text-sm" style="margin-top:.2rem;">${r.delegate}</div>
-      </div>`).join('');
-  }
+  rEl.innerHTML = ress.length
+    ? ress.slice(-5).reverse().map(r=>`
+        <div class="item" onclick="goto('resolutions')">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;">
+            <div class="item-title">${r.title}</div>
+            <span class="badge badge-${r.status}" style="flex-shrink:0;margin-top:.1rem;">${r.status}</span>
+          </div>
+          <div class="item-meta">${r.delegate}</div>
+        </div>`).join('')
+    : '<div class="empty">No resolutions yet</div>';
 
-  const pending = amends.filter(a=>a.status==='submitted').slice(-4).reverse();
-  const dEl = document.getElementById('dash-amendments');
-  if (!pending.length) { dEl.innerHTML = '<div class="empty">No pending amendments</div>'; }
-  else {
-    dEl.innerHTML = pending.map(a=>`
-      <div class="item-row" style="cursor:pointer" onclick="goto('amendments')">
-        <div class="flex-between mb-1"><span class="tag">${a.type}</span><span class="badge badge-submitted">submitted</span></div>
-        <div style="font-family:var(--serif);font-size:.88rem;">${a.text.substring(0,80)}${a.text.length>80?'…':''}</div>
-        <div class="text-muted text-sm" style="margin-top:.2rem;">${a.delegate}</div>
-      </div>`).join('');
-  }
+  const pending = amends.filter(a=>a.status==='submitted').slice(-5).reverse();
+  document.getElementById('dash-amendments').innerHTML = pending.length
+    ? pending.map(a=>`
+        <div class="item" onclick="goto('amendments')">
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.2rem;">
+            <span class="tag">${a.type}</span>
+            <span class="badge badge-submitted">submitted</span>
+          </div>
+          <div class="item-title" style="font-size:.86rem;">${a.text.substring(0,72)}${a.text.length>72?'…':''}</div>
+          <div class="item-meta">${a.delegate}</div>
+        </div>`).join('')
+    : '<div class="empty">No pending amendments</div>';
 
-  const scores = getScores();
-  let rows = dels.map(d=>{
-    const ds=scores[d]||{};
-    const pa=avg(ds.poi||[]),sa=avg(ds.speech||[]),ra=avg(ds.resolution||[]);
-    return {d,pa,sa,ra,ta:avg([pa,sa,ra].filter(x=>x>0))};
-  }).sort((a,b)=>b.ta-a.ta).slice(0,5);
-
+  const scores=getScores();
+  const rows=dels.map(d=>{ const ds=scores[d]||{}; const pa=avg(ds.poi||[]),sa=avg(ds.speech||[]),ra=avg(ds.resolution||[]); return {d,pa,sa,ra,ta:avg([pa,sa,ra].filter(x=>x>0))}; }).sort((a,b)=>b.ta-a.ta).slice(0,5);
   document.getElementById('dash-leaderboard').innerHTML = rows.length
     ? rows.map((r,i)=>`<tr>
-        <td class="${i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':''}">${['1st','2nd','3rd'][i]||'#'+(i+1)}</td>
+        <td class="${['rank-1','rank-2','rank-3'][i]||''}">${['1st','2nd','3rd'][i]||'#'+(i+1)}</td>
         <td>${r.d}</td>
         <td style="text-align:center;">${r.pa?r.pa.toFixed(2):'—'}</td>
         <td style="text-align:center;">${r.sa?r.sa.toFixed(2):'—'}</td>
@@ -875,43 +878,38 @@ function renderDashboard() {
 }
 
 // ── RESOLUTIONS ──
-let resFilter = 'all';
-function filterRes(f,btn) {
-  resFilter = f;
-  document.querySelectorAll('#page-resolutions .filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); renderResolutions();
-}
+let resFilter='all';
+function filterRes(f,btn) { resFilter=f; document.querySelectorAll('#page-resolutions .filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderResolutions(); }
 
 function renderResolutions() {
-  document.getElementById('btn-add-res').style.display = isChair() ? '' : 'none';
-  const ress = getResolutions().filter(r=>resFilter==='all'||r.status===resFilter);
-  const el   = document.getElementById('res-list');
+  document.getElementById('btn-add-res').style.display=isChair()?'':'none';
+  const ress=getResolutions().filter(r=>resFilter==='all'||r.status===resFilter);
+  const el=document.getElementById('res-list');
   if (!ress.length) { el.innerHTML='<div class="empty">No resolutions found</div>'; return; }
-
-  el.innerHTML = ress.map(r=>{
-    const amends = getAmendments().filter(a=>a.resId===r.id);
-    const actions = isChair() ? `<div class="res-actions">
-      ${r.status!=='passed' ?`<button class="btn btn-success btn-sm" onclick="setResStatus('${r.id}','passed')">Mark Passed</button>`:''}
-      ${r.status!=='failed' ?`<button class="btn btn-danger btn-sm"  onclick="setResStatus('${r.id}','failed')">Mark Failed</button>`:''}
-      ${r.status!=='pending'?`<button class="btn btn-ghost btn-sm"   onclick="setResStatus('${r.id}','pending')">Reopen</button>`:''}
+  el.innerHTML=ress.map(r=>{
+    const amends=getAmendments().filter(a=>a.resId===r.id);
+    const actions=isChair()?`<div class="res-actions">
+      ${r.status!=='passed'?`<button class="btn btn-success btn-sm" onclick="setResStatus('${r.id}','passed')">Mark Passed</button>`:''}
+      ${r.status!=='failed'?`<button class="btn btn-danger btn-sm"  onclick="setResStatus('${r.id}','failed')">Mark Failed</button>`:''}
+      ${r.status!=='pending'?`<button class="btn btn-ghost btn-sm"  onclick="setResStatus('${r.id}','pending')">Reopen</button>`:''}
       <button class="btn btn-ghost btn-sm" onclick="deleteResolution('${r.id}')">Delete</button>
-    </div>` : '';
-    return `<div class="res-card">
+    </div>`:'';
+    return `<div class="res-card" data-status="${r.status}">
       <div class="res-header" onclick="toggleRes('rb-${r.id}')">
         <div style="flex:1;">
           <div class="res-title">${r.title}</div>
-          <div class="text-muted text-sm" style="margin-top:.25rem;">${r.delegate} &nbsp;·&nbsp; ${amends.length} amendment${amends.length!==1?'s':''}</div>
+          <div class="text-muted text-sm" style="margin-top:.22rem;">${r.delegate} &nbsp;·&nbsp; ${amends.length} amendment${amends.length!==1?'s':''}</div>
         </div>
         <div class="res-meta">
           <span class="badge badge-${r.status}">${r.status}</span>
-          <span class="text-muted" style="font-size:.8rem;font-family:var(--sans);">&#9662;</span>
+          <span class="text-muted" style="font-size:.8rem;">&#9662;</span>
         </div>
       </div>
       <div class="res-body" id="rb-${r.id}">
         <div class="res-text">${r.text}</div>
-        <div style="border-top:1px solid var(--line);margin:1rem 0;padding-top:.85rem;">
-          <div style="font-family:var(--sans);font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:.6rem;">Amendments (${amends.length})</div>
-          ${amends.length ? amends.map(a=>`
+        <div style="padding-top:.85rem;border-top:1px solid var(--line);margin-bottom:.85rem;">
+          <div style="font-size:.67rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.55rem;">Amendments (${amends.length})</div>
+          ${amends.length?amends.map(a=>`
             <div class="amend-card" style="margin-bottom:.5rem;">
               <div class="amend-meta">
                 <span class="amend-clause">${a.clause}</span>
@@ -920,7 +918,7 @@ function renderResolutions() {
                 <span class="badge badge-${a.status}">${a.status}</span>
               </div>
               <div class="amend-text">${a.text}</div>
-            </div>`).join('') : '<div class="text-muted text-sm">No amendments submitted</div>'}
+            </div>`).join(''):'<div class="text-muted text-sm">No amendments submitted</div>'}
         </div>
         ${actions}
       </div>
@@ -932,76 +930,63 @@ function toggleRes(id) { document.getElementById(id).classList.toggle('open'); }
 
 function addResolution() {
   if (!isChair()) return;
-  const title    = document.getElementById('res-title-inp').value.trim();
-  const delegate = document.getElementById('res-delegate-inp').value.trim();
-  const text     = document.getElementById('res-text-inp').value.trim();
-  if (!title || !text) { toast('Please fill in title and resolution text'); return; }
-  const ress = getResolutions();
-  ress.push({ id:uid(), title, delegate: delegate||'Chair', text, status:'pending', createdAt:Date.now() });
-  DB.set('resolutions', ress);
+  const title=document.getElementById('res-title-inp').value.trim();
+  const delegate=document.getElementById('res-delegate-inp').value.trim();
+  const text=document.getElementById('res-text-inp').value.trim();
+  if (!title||!text) { toast('Please fill in title and resolution text'); return; }
+  const ress=getResolutions();
+  ress.push({id:uid(),title,delegate:delegate||'Chair',text,status:'pending',createdAt:Date.now()});
+  DB.set('resolutions',ress);
   closeModal('modal-add-res');
-  ['res-title-inp','res-delegate-inp','res-text-inp'].forEach(id => document.getElementById(id).value = '');
+  ['res-title-inp','res-delegate-inp','res-text-inp'].forEach(id=>document.getElementById(id).value='');
   toast('Resolution added'); renderResolutions();
   if (currentPage==='dashboard') renderDashboard();
 }
 
-function setResStatus(id, status) {
+function setResStatus(id,status) {
   if (!isChair()) return;
-  const ress = getResolutions(), r = ress.find(r=>r.id===id);
+  const ress=getResolutions(),r=ress.find(r=>r.id===id);
   if (r) { r.status=status; DB.set('resolutions',ress); renderResolutions(); toast(`Marked ${status}`); }
 }
 
 function deleteResolution(id) {
-  if (!isChair() || !confirm('Delete this resolution and its amendments?')) return;
-  DB.set('resolutions', getResolutions().filter(r=>r.id!==id));
-  DB.set('amendments',  getAmendments().filter(a=>a.resId!==id));
+  if (!isChair()||!confirm('Delete this resolution and its amendments?')) return;
+  DB.set('resolutions',getResolutions().filter(r=>r.id!==id));
+  DB.set('amendments',getAmendments().filter(a=>a.resId!==id));
   renderResolutions(); toast('Deleted');
 }
 
 // ── AMENDMENTS ──
-let amendFilter = 'all';
-function filterAmend(f,btn) {
-  amendFilter = f;
-  document.querySelectorAll('#page-amendments .filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active'); renderAmendments();
-}
+let amendFilter='all';
+function filterAmend(f,btn) { amendFilter=f; document.querySelectorAll('#page-amendments .filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderAmendments(); }
 
 function renderAmendments() {
-  const submitBtn = document.getElementById('btn-add-amend');
-  const filterBar = document.getElementById('amend-filter-bar');
-  const banner    = document.getElementById('amend-info-banner');
-
-  if (isChair()) {
-    submitBtn.style.display = 'none'; filterBar.style.display = ''; banner.style.display = 'none';
-  } else {
-    submitBtn.style.display = ''; filterBar.style.display = 'none';
-    banner.style.display = 'block';
-    banner.innerHTML = `Submitting as <strong>${session.name}</strong>. You can only see your own amendments.`;
-  }
-
-  let amends = getAmendments();
-  if (isDelegate()) amends = amends.filter(a=>a.delegate===session.name);
-  else amends = amends.filter(a=>amendFilter==='all'||a.status===amendFilter);
-  amends = amends.sort((a,b)=>b.createdAt-a.createdAt);
-
-  const el = document.getElementById('amend-list');
+  const submitBtn=document.getElementById('btn-add-amend');
+  const filterBar=document.getElementById('amend-filter-bar');
+  const banner=document.getElementById('amend-info-banner');
+  if (isChair()) { submitBtn.style.display='none'; filterBar.style.display=''; banner.style.display='none'; }
+  else { submitBtn.style.display=''; filterBar.style.display='none'; banner.style.display='block'; banner.innerHTML=`Submitting as <strong>${session.name}</strong>. You can only see your own amendments.`; }
+  let amends=getAmendments();
+  if (isDelegate()) amends=amends.filter(a=>a.delegate===session.name);
+  else amends=amends.filter(a=>amendFilter==='all'||a.status===amendFilter);
+  amends=amends.sort((a,b)=>b.createdAt-a.createdAt);
+  const el=document.getElementById('amend-list');
   if (!amends.length) { el.innerHTML='<div class="empty">No amendments found</div>'; return; }
-
-  el.innerHTML = amends.map(a=>{
-    const chairActions = isChair() ? `<div class="amend-actions">
-      ${a.status!=='accepted' ?`<button class="btn btn-success btn-sm" onclick="setAmendStatus('${a.id}','accepted')">Accept</button>`:''}
-      ${a.status!=='rejected' ?`<button class="btn btn-danger btn-sm"  onclick="setAmendStatus('${a.id}','rejected')">Reject</button>`:''}
-      ${a.status!=='submitted'?`<button class="btn btn-ghost btn-sm"   onclick="setAmendStatus('${a.id}','submitted')">Reopen</button>`:''}
+  el.innerHTML=amends.map(a=>{
+    const chairActions=isChair()?`<div class="amend-actions">
+      ${a.status!=='accepted'?`<button class="btn btn-success btn-sm" onclick="setAmendStatus('${a.id}','accepted')">Accept</button>`:''}
+      ${a.status!=='rejected'?`<button class="btn btn-danger btn-sm"  onclick="setAmendStatus('${a.id}','rejected')">Reject</button>`:''}
+      ${a.status!=='submitted'?`<button class="btn btn-ghost btn-sm"  onclick="setAmendStatus('${a.id}','submitted')">Reopen</button>`:''}
       <button class="btn btn-ghost btn-sm" onclick="deleteAmendment('${a.id}')">Delete</button>
-    </div>` : '';
-    return `<div class="amend-card" style="background:#fff;border-color:var(--border);">
+    </div>`:'';
+    return `<div class="amend-card">
       <div class="amend-meta">
         <span class="amend-clause">${a.clause}</span>
         <span class="tag">${a.type}</span>
         <span class="badge badge-${a.status}">${a.status}</span>
         <span class="amend-delegate-label" style="margin-left:auto;">${a.delegate}</span>
       </div>
-      <div style="font-family:var(--sans);font-size:.73rem;color:var(--muted);margin-bottom:.45rem;">Resolution: <strong style="color:var(--text);">${a.resTitle}</strong></div>
+      <div style="font-size:.74rem;color:var(--muted);margin-bottom:.45rem;">Resolution: <strong style="color:var(--navy);">${a.resTitle}</strong></div>
       <div class="amend-text">${a.text}</div>
       ${chairActions}
     </div>`;
@@ -1010,83 +995,74 @@ function renderAmendments() {
 
 function submitAmendment() {
   if (!isDelegate()) return;
-  const ress = getResolutions().filter(r=>r.status==='pending');
+  const ress=getResolutions().filter(r=>r.status==='pending');
   if (!ress.length) { toast('No pending resolutions to amend'); return; }
-  const resId  = document.getElementById('amend-res-inp').value;
-  const clause = document.getElementById('amend-clause-inp').value.trim();
-  const type   = document.getElementById('amend-type-inp').value;
-  const text   = document.getElementById('amend-text-inp').value.trim();
-  if (!resId || !text) { toast('Please fill all required fields'); return; }
-  const res    = getResolutions().find(r=>r.id===resId);
-  const amends = getAmendments();
-  amends.push({ id:uid(), delegate:session.name, resId, resTitle:res?res.title:'?', clause:clause||'General', type, text, status:'submitted', createdAt:Date.now() });
-  DB.set('amendments', amends);
+  const resId=document.getElementById('amend-res-inp').value;
+  const clause=document.getElementById('amend-clause-inp').value.trim();
+  const type=document.getElementById('amend-type-inp').value;
+  const text=document.getElementById('amend-text-inp').value.trim();
+  if (!resId||!text) { toast('Please fill all required fields'); return; }
+  const res=getResolutions().find(r=>r.id===resId);
+  const amends=getAmendments();
+  amends.push({id:uid(),delegate:session.name,resId,resTitle:res?res.title:'?',clause:clause||'General',type,text,status:'submitted',createdAt:Date.now()});
+  DB.set('amendments',amends);
   closeModal('modal-add-amend');
-  document.getElementById('amend-text-inp').value = '';
-  document.getElementById('amend-clause-inp').value = '';
+  document.getElementById('amend-text-inp').value='';
+  document.getElementById('amend-clause-inp').value='';
   toast('Amendment submitted'); renderAmendments();
   if (currentPage==='dashboard') renderDashboard();
 }
 
-function setAmendStatus(id, status) {
+function setAmendStatus(id,status) {
   if (!isChair()) return;
-  const amends = getAmendments(), a = amends.find(a=>a.id===id);
+  const amends=getAmendments(),a=amends.find(a=>a.id===id);
   if (a) { a.status=status; DB.set('amendments',amends); renderAmendments(); toast(`Amendment ${status}`); }
 }
 
 function deleteAmendment(id) {
   if (!isChair()) return;
-  DB.set('amendments', getAmendments().filter(a=>a.id!==id));
+  DB.set('amendments',getAmendments().filter(a=>a.id!==id));
   renderAmendments(); toast('Deleted');
 }
 
 // ── TALLY ──
-let activeDelegateScore = null;
+let activeDelegateScore=null;
 
 function addTallyDelegation() {
-  const inp  = document.getElementById('new-tally-del');
-  const name = inp.value.trim();
+  const inp=document.getElementById('new-tally-del');
+  const name=inp.value.trim();
   if (!name) return;
-  const all = getAllTallyNames();
-  if (all.map(n=>n.toLowerCase()).includes(name.toLowerCase())) { toast('Already in tally'); inp.value=''; return; }
-  const manual = getTallyDels();
-  manual.push(name);
-  DB.set('tallyDels', manual);
-  inp.value = ''; toast(`Added: ${name}`); renderTally();
+  if (getAllTallyNames().map(n=>n.toLowerCase()).includes(name.toLowerCase())) { toast('Already in tally'); inp.value=''; return; }
+  const manual=getTallyDels(); manual.push(name); DB.set('tallyDels',manual);
+  inp.value=''; toast(`Added: ${name}`); renderTally();
 }
 
 function renderTally() {
-  const search = (document.getElementById('tally-search')||{}).value?.toLowerCase() || '';
-  const sortBy = (document.getElementById('tally-sort')||{}).value || 'name';
-  const scores = getScores();
-
-  let rows = getAllTallyNames()
-    .filter(d => d.toLowerCase().includes(search))
-    .map(d => {
-      const ds = scores[d] || {};
-      const pa = avg(ds.poi||[]), sa = avg(ds.speech||[]), ra = avg(ds.resolution||[]);
-      return { d, poi:ds.poi||[], speech:ds.speech||[], res:ds.resolution||[], pa, sa, ra, ta:avg([pa,sa,ra].filter(x=>x>0)) };
-    });
-
+  const search=(document.getElementById('tally-search')||{}).value?.toLowerCase()||'';
+  const sortBy=(document.getElementById('tally-sort')||{}).value||'name';
+  const scores=getScores();
+  let rows=getAllTallyNames().filter(d=>d.toLowerCase().includes(search)).map(d=>{
+    const ds=scores[d]||{};
+    const pa=avg(ds.poi||[]),sa=avg(ds.speech||[]),ra=avg(ds.resolution||[]);
+    return {d,poi:ds.poi||[],speech:ds.speech||[],res:ds.resolution||[],pa,sa,ra,ta:avg([pa,sa,ra].filter(x=>x>0))};
+  });
   if (sortBy==='total') rows.sort((a,b)=>b.ta-a.ta);
   else if (sortBy==='poi')    rows.sort((a,b)=>b.pa-a.pa);
   else if (sortBy==='speech') rows.sort((a,b)=>b.sa-a.sa);
   else if (sortBy==='res')    rows.sort((a,b)=>b.ra-a.ra);
   else rows.sort((a,b)=>a.d.localeCompare(b.d));
-
-  const tbody = document.getElementById('tally-body');
-  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="10" class="empty">No delegations yet — add one above</td></tr>'; return; }
-
-  tbody.innerHTML = rows.map((r,i)=>`<tr>
-    <td style="color:var(--muted);font-family:var(--sans);font-size:.78rem;">${i+1}</td>
-    <td><strong style="font-family:var(--serif);font-weight:normal;">${r.d}</strong></td>
+  const tbody=document.getElementById('tally-body');
+  if (!rows.length) { tbody.innerHTML='<tr><td colspan="10" class="empty">No delegations yet</td></tr>'; return; }
+  tbody.innerHTML=rows.map((r,i)=>`<tr>
+    <td style="color:var(--muted);font-size:.78rem;">${i+1}</td>
+    <td><strong>${r.d}</strong></td>
     <td style="text-align:center;"><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;max-width:130px;">${r.poi.map(s=>`<span class="tag">${s}</span>`).join('')||'<span class="text-muted text-sm">—</span>'}</div></td>
-    <td style="text-align:center;">${r.pa ? scoreBar(r.pa) : '—'}</td>
+    <td style="text-align:center;">${r.pa?scoreBar(r.pa):'—'}</td>
     <td style="text-align:center;"><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;max-width:130px;">${r.speech.map(s=>`<span class="tag">${s}</span>`).join('')||'<span class="text-muted text-sm">—</span>'}</div></td>
-    <td style="text-align:center;">${r.sa ? scoreBar(r.sa) : '—'}</td>
+    <td style="text-align:center;">${r.sa?scoreBar(r.sa):'—'}</td>
     <td style="text-align:center;"><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;max-width:130px;">${r.res.map(s=>`<span class="tag">${s}</span>`).join('')||'<span class="text-muted text-sm">—</span>'}</div></td>
-    <td style="text-align:center;">${r.ra ? scoreBar(r.ra) : '—'}</td>
-    <td style="text-align:center;font-family:var(--sans);color:var(--gold);font-weight:700;font-size:.95rem;">${r.ta ? r.ta.toFixed(2) : '—'}</td>
+    <td style="text-align:center;">${r.ra?scoreBar(r.ra):'—'}</td>
+    <td style="text-align:center;color:var(--gold);font-weight:700;font-size:.95rem;">${r.ta?r.ta.toFixed(2):'—'}</td>
     <td style="text-align:center;white-space:nowrap;">
       <button class="btn btn-primary btn-sm" onclick="openScoreEntry('${r.d.replace(/'/g,"\\'")}')">+ Score</button>
       <button class="btn btn-ghost btn-sm" style="margin-left:.25rem;" onclick="removeTallyRow('${r.d.replace(/'/g,"\\'")}')">&#10005;</button>
@@ -1096,25 +1072,22 @@ function renderTally() {
 
 function removeTallyRow(name) {
   if (!confirm(`Remove "${name}" from tally? Scores will be deleted.`)) return;
-  DB.set('tallyDels', getTallyDels().filter(d => d !== name));
-  const scores = getScores(); delete scores[name]; DB.set('scores', scores);
+  DB.set('tallyDels',getTallyDels().filter(d=>d!==name));
+  const scores=getScores(); delete scores[name]; DB.set('scores',scores);
   renderTally(); toast(`${name} removed`);
 }
 
 function scoreBar(val) {
-  const pct = val/5*100;
-  const color = val>=4 ? 'var(--green)' : val>=2.5 ? 'var(--gold)' : 'var(--red)';
-  return `<div class="score-bar-wrap">
-    <div class="score-bar-track"><div class="score-bar-fill" style="width:${pct}%;background:${color};"></div></div>
-    <span style="font-family:var(--sans);font-size:.78rem;color:${color};font-weight:700;">${val.toFixed(2)}</span>
-  </div>`;
+  const pct=val/5*100;
+  const color=val>=4?'var(--green)':val>=2.5?'var(--gold)':'var(--red)';
+  return `<div class="score-bar-wrap"><div class="score-bar-track"><div class="score-bar-fill" style="width:${pct}%;background:${color};"></div></div><span style="font-size:.78rem;color:${color};font-weight:700;">${val.toFixed(2)}</span></div>`;
 }
 
 function openScoreEntry(delegation) {
-  activeDelegateScore = delegation;
-  document.getElementById('score-modal-title').textContent = `Score — ${delegation}`;
-  const ds = (getScores()[delegation]) || { poi:[], speech:[], resolution:[] };
-  document.getElementById('score-modal-body').innerHTML = `
+  activeDelegateScore=delegation;
+  document.getElementById('score-modal-title').textContent=`Score — ${delegation}`;
+  const ds=(getScores()[delegation])||{poi:[],speech:[],resolution:[]};
+  document.getElementById('score-modal-body').innerHTML=`
     <div class="form-group">
       <label>Category</label>
       <select id="score-cat">
@@ -1126,13 +1099,7 @@ function openScoreEntry(delegation) {
     <div class="form-group">
       <label>Score (1–5)</label>
       <div style="display:flex;gap:.45rem;margin-bottom:.5rem;">
-        ${[1,2,3,4,5].map(n=>`
-          <div onclick="selectScore(${n})" id="sc-${n}"
-               style="width:2.5rem;height:2.5rem;border-radius:2px;border:1px solid var(--border);
-                      background:#FAFAF8;display:flex;align-items:center;justify-content:center;
-                      cursor:pointer;font-family:var(--serif);font-size:1rem;transition:all .18s;color:var(--text);">
-            ${n}
-          </div>`).join('')}
+        ${[1,2,3,4,5].map(n=>`<div onclick="selectScore(${n})" id="sc-${n}" style="width:2.5rem;height:2.5rem;border-radius:6px;border:1.5px solid var(--border);background:#FAFBFF;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;font-size:.95rem;transition:all .18s;color:var(--navy);">${n}</div>`).join('')}
       </div>
       <input type="hidden" id="score-val" />
       <div id="score-label" class="text-muted text-sm" style="margin-top:.25rem;"></div>
@@ -1142,61 +1109,55 @@ function openScoreEntry(delegation) {
       <input id="score-note" placeholder="Brief remark…" />
     </div>
     <hr style="border:none;border-top:1px solid var(--line);margin:1rem 0;" />
-    <div style="font-family:var(--sans);font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:.5rem;">Previous Scores — ${delegation}</div>
-    ${['poi','speech','resolution'].map(cat => {
-      const arr = ds[cat] || [];
-      return arr.length ? `<div style="margin-bottom:.4rem;font-family:var(--sans);"><strong style="font-size:.76rem;">${cat.toUpperCase()}:</strong> ${arr.map(s=>`<span class="tag">${s}</span>`).join(' ')} <span class="text-muted text-sm">avg ${avg(arr).toFixed(2)}</span></div>` : '';
-    }).join('') || '<div class="text-muted text-sm">No entries yet</div>'}
+    <div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:.5rem;">Previous scores — ${delegation}</div>
+    ${['poi','speech','resolution'].map(cat=>{const arr=ds[cat]||[];return arr.length?`<div style="margin-bottom:.4rem;"><strong style="font-size:.76rem;">${cat.toUpperCase()}:</strong> ${arr.map(s=>`<span class="tag">${s}</span>`).join(' ')} <span class="text-muted text-sm">avg ${avg(arr).toFixed(2)}</span></div>`:''}).join('')||'<div class="text-muted text-sm">No entries yet</div>'}
   `;
   openModal('modal-add-score');
 }
 
 function selectScore(n) {
-  document.getElementById('score-val').value = n;
-  [1,2,3,4,5].forEach(i => {
-    const el = document.getElementById('sc-'+i);
-    if (i <= n) { el.style.background=`var(--navy)`; el.style.borderColor='var(--navy)'; el.style.color='#fff'; }
-    else        { el.style.background='#FAFAF8'; el.style.borderColor='var(--border)'; el.style.color='var(--text)'; }
+  document.getElementById('score-val').value=n;
+  [1,2,3,4,5].forEach(i=>{
+    const el=document.getElementById('sc-'+i);
+    if (i<=n) { el.style.background='var(--blue)'; el.style.borderColor='var(--blue)'; el.style.color='#fff'; }
+    else      { el.style.background='#FAFBFF'; el.style.borderColor='var(--border)'; el.style.color='var(--navy)'; }
   });
-  document.getElementById('score-label').textContent = {1:'Poor',2:'Fair',3:'Good',4:'Very Good',5:'Excellent'}[n];
+  document.getElementById('score-label').textContent={1:'Poor',2:'Fair',3:'Good',4:'Very Good',5:'Excellent'}[n];
 }
 
 function saveScoreEntry() {
-  if (!activeDelegateScore || !isChair()) return;
-  const cat = document.getElementById('score-cat').value;
-  const val = parseInt(document.getElementById('score-val').value);
-  if (!val || val<1 || val>5) { toast('Please select a score (1–5)'); return; }
-  const scores = getScores();
-  if (!scores[activeDelegateScore]) scores[activeDelegateScore] = { poi:[], speech:[], resolution:[] };
-  if (!scores[activeDelegateScore][cat]) scores[activeDelegateScore][cat] = [];
+  if (!activeDelegateScore||!isChair()) return;
+  const cat=document.getElementById('score-cat').value;
+  const val=parseInt(document.getElementById('score-val').value);
+  if (!val||val<1||val>5) { toast('Please select a score (1–5)'); return; }
+  const scores=getScores();
+  if (!scores[activeDelegateScore]) scores[activeDelegateScore]={poi:[],speech:[],resolution:[]};
+  if (!scores[activeDelegateScore][cat]) scores[activeDelegateScore][cat]=[];
   scores[activeDelegateScore][cat].push(val);
-  DB.set('scores', scores);
+  DB.set('scores',scores);
   toast(`Score ${val} saved for ${activeDelegateScore}`);
   closeModal('modal-add-score'); renderTally();
   if (currentPage==='dashboard') renderDashboard();
 }
 
 function exportTally() {
-  const scores = getScores();
-  let csv = 'Delegation,POI Entries,POI Avg,Speech Entries,Speech Avg,Res Entries,Res Avg,Total Avg\n';
-  getAllTallyNames().forEach(d => {
-    const ds = scores[d]||{};
-    const poi=ds.poi||[], sp=ds.speech||[], re=ds.resolution||[];
-    const pa=avg(poi), sa=avg(sp), ra=avg(re), ta=avg([pa,sa,ra].filter(x=>x>0));
-    csv += `"${d}","${poi.join(',')}",${pa.toFixed(2)},"${sp.join(',')}",${sa.toFixed(2)},"${re.join(',')}",${ra.toFixed(2)},${ta.toFixed(2)}\n`;
+  const scores=getScores();
+  let csv='Delegation,POI Entries,POI Avg,Speech Entries,Speech Avg,Res Entries,Res Avg,Total Avg\n';
+  getAllTallyNames().forEach(d=>{
+    const ds=scores[d]||{};
+    const poi=ds.poi||[],sp=ds.speech||[],re=ds.resolution||[];
+    const pa=avg(poi),sa=avg(sp),ra=avg(re),ta=avg([pa,sa,ra].filter(x=>x>0));
+    csv+=`"${d}","${poi.join(',')}",${pa.toFixed(2)},"${sp.join(',')}",${sa.toFixed(2)},"${re.join(',')}",${ra.toFixed(2)},${ta.toFixed(2)}\n`;
   });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download = 'mundp-tally.csv'; a.click();
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='mundp-tally.csv'; a.click();
 }
 
 // ── BOOT ──
 seed();
 const _saved = DB.get('session');
-if (_saved && _saved.role === 'chair') {
-  session = _saved;
-  startApp();
-}
+if (_saved && _saved.role === 'chair') { session = _saved; startApp(); }
 </script>
 </body>
 </html>
