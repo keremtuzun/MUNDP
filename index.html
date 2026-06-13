@@ -476,7 +476,8 @@
       <div class="section mb-2">
         <div class="form-group">
           <label>Upload Resolution File</label>
-          <input type="file" id="fmt-file" accept=".txt,.docx" onchange="handleFmtFile(event)" />
+          <input type="file" id="fmt-file" onchange="handleFmtFile(event)" />
+          <div class="text-muted text-sm" style="margin-top:.35rem;">Best with <strong>.docx</strong> or <strong>.txt</strong>. If your file (e.g. .doc, .pdf, Google Doc) won't format cleanly, paste the text below instead.</div>
         </div>
         <div style="text-align:center;color:var(--muted);font-family:var(--sans);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;margin:.5rem 0;">— or paste the text —</div>
         <div class="form-group">
@@ -1405,11 +1406,29 @@ function handleFmtFile(ev) {
       .then(readDocxXml)
       .then(xml => done(parseDocxParagraphs(xml)))
       .catch(e => { console.error(e); toast('Could not read this .docx — try pasting the text instead'); });
+  } else if (/\.(doc|pdf|pages|rtf|odt|key)$/i.test(name)) {
+    // binary document formats can't be read as text in the browser
+    toast('Save this as .docx or .txt, or paste the text below');
   } else {
     file.text()
-      .then(txt => done(txt.split(/\r?\n/).map(t => ({ text:t }))))
+      .then(txt => {
+        if (fmtLooksBinary(txt)) { toast('This file isn’t plain text — save as .docx/.txt or paste the text'); return; }
+        done(txt.split(/\r?\n/).map(t => ({ text:t })));
+      })
       .catch(() => toast('Could not read this file'));
   }
+}
+
+// rough heuristic: non-text files have many control/null bytes
+function fmtLooksBinary(s) {
+  const sample = s.slice(0, 2000);
+  if (!sample.length) return false;
+  let bad = 0;
+  for (let i = 0; i < sample.length; i++) {
+    const c = sample.charCodeAt(i);
+    if (c === 0 || c < 9 || (c > 13 && c < 32)) bad++;
+  }
+  return bad / sample.length > 0.05;
 }
 
 // Minimal .docx reader: locate word/document.xml in the zip and inflate it (deflate-raw).
