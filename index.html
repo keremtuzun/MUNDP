@@ -468,8 +468,9 @@
         Upload a <strong>.docx</strong> or <strong>.txt</strong> file — or paste the text below — and the
         formatted copy downloads to your <strong>Downloads</strong> folder automatically. Clause numbering
         (<strong>1.</strong> &rarr; <strong>a.</strong> &rarr; <strong>i.</strong>) and indentation are
-        corrected to the standard format. The <strong>QUESTION OF</strong> headings and all wording are kept
-        exactly as written.
+        corrected to the standard format, each operative clause is closed with a <strong>;</strong> and the
+        final clause with a <strong>.</strong> The <strong>QUESTION OF</strong> headings and all wording are
+        kept exactly as written.
       </div>
 
       <div class="section mb-2">
@@ -1308,7 +1309,24 @@ function fmtBuildItems(rawLines) {
     else if (level === 2) { n2++; n3=0;       depth=2; items.push({ level:2, marker:letterFor(n2)+'.', text:body }); }
     else                  { n3++;             depth=3; items.push({ level:3, marker:romanFor(n3)+'.',  text:body }); }
   }
+  fmtApplyClausePunctuation(items);
   return items;
+}
+
+// Each operative clause ends with ';'; the final clause closes the resolution with '.'.
+// The terminal mark sits on the last sub-item belonging to each operative clause.
+function fmtApplyClausePunctuation(items) {
+  const opStarts = [];
+  items.forEach((it, i) => { if (it.level === 1) opStarts.push(i); });
+  for (let g = 0; g < opStarts.length; g++) {
+    const start = opStarts[g];
+    const end   = g + 1 < opStarts.length ? opStarts[g + 1] : items.length;
+    let last = -1;
+    for (let i = start; i < end; i++) { if (items[i].level) last = i; }
+    if (last < 0) continue;
+    const mark = (g === opStarts.length - 1) ? '.' : ';';
+    items[last].text = items[last].text.replace(/[\s;:,.]*$/, '') + mark;
+  }
 }
 
 function fmtPreviewHtml(items) {
