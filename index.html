@@ -7,8 +7,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --navy:   #1B3358;
-      --navy2:  #12264A;
+      --navy:   #0B2A66;
+      --navy2:  #07194A;
+      --blue:   #15439E;
+      --blue-tint: #EAF0FB;
       --bg:     #FFFFFF;
       --page:   #F9F7F3;
       --warm:   #F2F0EB;
@@ -106,35 +108,35 @@
     #app { display: none; }
 
     header {
-      background: #fff;
-      border-bottom: 2px solid var(--navy);
+      background: var(--navy);
+      border-bottom: 3px solid var(--blue);
       padding: 0 2.5rem;
       display: flex; align-items: center; gap: 2rem;
       position: sticky; top: 0; z-index: 100;
-      height: 56px;
+      height: 58px;
     }
     .logo { display: flex; align-items: center; gap: .7rem; text-decoration: none; }
-    .logo img { height: 26px; }
-    .logo-name { font-family: var(--serif); font-size: .98rem; font-weight: normal; color: var(--text); }
-    .logo-sub  { font-family: var(--sans); font-size: .58rem; color: var(--muted); margin-top: .08rem; }
+    .logo img { height: 26px; filter: brightness(0) invert(1); }
+    .logo-name { font-family: var(--serif); font-size: 1rem; font-weight: normal; color: #fff; }
+    .logo-sub  { font-family: var(--sans); font-size: .58rem; color: rgba(255,255,255,.62); margin-top: .08rem; }
 
     nav { display: flex; height: 100%; align-items: stretch; }
     .nav-btn {
-      background: none; border: none; color: var(--muted);
+      background: none; border: none; color: rgba(255,255,255,.72);
       padding: 0 1rem;
       font-family: var(--sans); font-size: .82rem; font-weight: 600;
       cursor: pointer; transition: color .18s;
-      border-bottom: 2px solid transparent; margin-bottom: -2px;
+      border-bottom: 3px solid transparent; margin-bottom: -3px;
       display: flex; align-items: center;
     }
-    .nav-btn:hover { color: var(--text); }
-    .nav-btn.active { color: var(--navy); border-bottom-color: var(--navy); }
+    .nav-btn:hover { color: #fff; }
+    .nav-btn.active { color: #fff; border-bottom-color: #fff; }
 
     .header-right { margin-left: auto; display: flex; align-items: center; gap: 1rem; }
-    .session-badge { font-family: var(--sans); font-size: .75rem; color: var(--muted); }
-    .session-badge span { color: var(--text); font-weight: 700; }
-    .btn-logout { background: none; border: 1px solid var(--border); color: var(--muted); padding: .28rem .78rem; border-radius: 2px; font-family: var(--sans); font-size: .74rem; cursor: pointer; transition: all .18s; }
-    .btn-logout:hover { border-color: var(--red); color: var(--red); }
+    .session-badge { font-family: var(--sans); font-size: .75rem; color: rgba(255,255,255,.7); }
+    .session-badge span { color: #fff; font-weight: 700; }
+    .btn-logout { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.35); color: rgba(255,255,255,.9); padding: .28rem .78rem; border-radius: 2px; font-family: var(--sans); font-size: .74rem; cursor: pointer; transition: all .18s; }
+    .btn-logout:hover { border-color: #fff; background: rgba(255,255,255,.16); color: #fff; }
 
     /* ── page layout ── */
     main { max-width: 1120px; margin: 0 auto; padding: 2.75rem 2rem; }
@@ -193,6 +195,13 @@
     .filter-bar { display: flex; gap: .35rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
     .filter-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: .24rem .7rem; border-radius: 2px; font-family: var(--sans); font-size: .72rem; font-weight: 600; cursor: pointer; transition: all .18s; }
     .filter-btn.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+    /* committee chips */
+    .committee-bar { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .committee-chip { background: var(--blue-tint); border: 1px solid #C5D6F2; color: var(--navy); padding: .34rem .85rem; border-radius: 999px; font-family: var(--sans); font-size: .78rem; font-weight: 600; cursor: pointer; transition: all .18s; }
+    .committee-chip:hover { border-color: var(--blue); }
+    .committee-chip.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .committee-label { font-family: var(--sans); font-size: .68rem; color: var(--navy); font-weight: 700; text-transform: uppercase; letter-spacing: .07em; }
 
     /* tables */
     .table-wrap { overflow-x: auto; }
@@ -343,6 +352,10 @@
             <input id="reg-delegation" placeholder="e.g. Republic of Turkey" />
           </div>
           <div class="form-group">
+            <label>Committee</label>
+            <select id="reg-committee"></select>
+          </div>
+          <div class="form-group">
             <label>Email</label>
             <input type="email" id="reg-email" placeholder="your@email.com" />
           </div>
@@ -420,7 +433,7 @@
         </div>
       </div>
 
-      <h2>Delegate Leaderboard</h2>
+      <h2>Delegate Leaderboard <span id="dash-lb-committee" style="font-family:var(--sans);font-size:.78rem;color:var(--blue);font-weight:700;"></span></h2>
       <div class="section">
         <div class="table-wrap">
           <table>
@@ -476,7 +489,8 @@
       <div class="section mb-2">
         <div class="form-group">
           <label>Upload Resolution File</label>
-          <input type="file" id="fmt-file" accept=".txt,.docx" onchange="handleFmtFile(event)" />
+          <input type="file" id="fmt-file" onchange="handleFmtFile(event)" />
+          <div class="text-muted text-sm" style="margin-top:.35rem;">Best with <strong>.docx</strong> or <strong>.txt</strong>. If your file (e.g. .doc, .pdf, Google Doc) won't format cleanly, paste the text below instead.</div>
         </div>
         <div style="text-align:center;color:var(--muted);font-family:var(--sans);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;margin:.5rem 0;">— or paste the text —</div>
         <div class="form-group">
@@ -527,15 +541,26 @@
       <div class="page-header">
         <div class="page-header-left">
           <h1>Delegate Tally</h1>
-          <p class="subtitle">Track scores per delegation (1–5)</p>
+          <p class="subtitle">Scores are tracked per committee (1–5) — pick a committee below</p>
         </div>
         <button class="btn btn-ghost btn-sm" onclick="exportTally()">Export CSV</button>
+      </div>
+
+      <!-- committee selector — always visible -->
+      <div class="section mb-2" style="margin-bottom:1rem;">
+        <div class="committee-label" style="margin-bottom:.55rem;">Committee</div>
+        <div id="committee-chips" class="committee-bar" style="margin-bottom:.85rem;"></div>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line);padding-top:.85rem;">
+          <input id="new-committee" style="width:220px;" placeholder="New committee name…" onkeydown="if(event.key==='Enter')addCommittee()" />
+          <button class="btn btn-primary btn-sm" onclick="addCommittee()">Add Committee</button>
+          <button class="btn btn-ghost btn-sm" onclick="removeCommittee()">Remove Current</button>
+        </div>
       </div>
 
       <div class="section mb-2" style="margin-bottom:1rem;">
         <div style="display:flex;gap:.65rem;align-items:flex-end;">
           <div class="form-group" style="flex:1;margin:0;">
-            <label>Add Delegation</label>
+            <label>Add Delegation to <span id="add-del-committee" style="color:var(--navy);text-transform:none;letter-spacing:0;"></span></label>
             <input id="new-tally-del" placeholder="e.g. Republic of Turkey" onkeydown="if(event.key==='Enter')addTallyDelegation()" />
           </div>
           <button class="btn btn-primary" style="height:38px;flex-shrink:0;" onclick="addTallyDelegation()">Add</button>
@@ -668,25 +693,51 @@ function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').
 function seed() {
   if (DB.get('chairCode')   === null) DB.set('chairCode',   'CHAIR2026');
   if (DB.get('delegates')   === null) DB.set('delegates',   []);
-  if (DB.get('tallyDels')   === null) DB.set('tallyDels',   []);
   if (DB.get('resolutions') === null) DB.set('resolutions', []);
   if (DB.get('amendments')  === null) DB.set('amendments',  []);
-  if (DB.get('scores')      === null) DB.set('scores',      {});
   if (DB.get('settings')    === null) DB.set('settings',    { name:'MUNDP 2026', committee:'General Assembly', topic:'Sustainable Development' });
+  if (DB.get('committees')  === null) DB.set('committees',  [{ id:'gen', name:'General Assembly' }]);
+  if (DB.get('tally')       === null) DB.set('tally',       {});   // { [committeeId]: [delegationName] }
+  if (DB.get('cscores')     === null) DB.set('cscores',     {});   // { [committeeId]: { [delegationName]: {poi,speech,resolution} } }
+  if (DB.get('activeCommittee') === null) DB.set('activeCommittee', (getCommittees()[0] || {}).id || 'gen');
+  migrateFlatTally();
+}
+
+// One-time migration: fold any old single-list tally/scores into the default committee.
+function migrateFlatTally() {
+  const oldDels = DB.get('tallyDels'), oldScores = DB.get('scores');
+  if (oldDels == null && oldScores == null) return;
+  const cid = getActiveCommittee();
+  if (Array.isArray(oldDels) && oldDels.length) {
+    const t = getTally(); t[cid] = [...new Set([...(t[cid]||[]), ...oldDels])]; DB.set('tally', t);
+  }
+  if (oldScores && Object.keys(oldScores).length) {
+    const cs = getCScores(); cs[cid] = Object.assign({}, cs[cid]||{}, oldScores); DB.set('cscores', cs);
+  }
+  DB.set('tallyDels', null); DB.set('scores', null);
 }
 
 const getChairCode   = () => DB.get('chairCode')   || 'CHAIR2026';
 const getDelegates   = () => DB.get('delegates')   || [];
-const getTallyDels   = () => DB.get('tallyDels')   || [];
 const getResolutions = () => DB.get('resolutions') || [];
 const getAmendments  = () => DB.get('amendments')  || [];
-const getScores      = () => DB.get('scores')      || {};
 const getSettings    = () => DB.get('settings')    || {};
 
-function getAllTallyNames() {
-  const merged = [...new Set([...getDelegates().map(d => d.delegation), ...getTallyDels()])];
-  return merged.sort((a,b) => a.localeCompare(b));
+// ── COMMITTEES ──
+const getCommittees      = () => DB.get('committees') || [];
+const getTally           = () => DB.get('tally')      || {};
+const getCScores         = () => DB.get('cscores')    || {};
+const getActiveCommittee = () => DB.get('activeCommittee') || ((getCommittees()[0]||{}).id) || 'gen';
+function setActiveCommittee(id) { DB.set('activeCommittee', id); }
+function committeeName(id) { const c = getCommittees().find(c => c.id === id); return c ? c.name : '—'; }
+
+// Delegations in a committee = manually-added names + registered delegate accounts assigned to it.
+function committeeDelegations(cid) {
+  const manual = getTally()[cid] || [];
+  const regs   = getDelegates().filter(d => d.committee === cid).map(d => d.delegation);
+  return [...new Set([...manual, ...regs])].sort((a,b) => a.localeCompare(b));
 }
+function committeeScores(cid) { return getCScores()[cid] || {}; }
 
 // ── SESSION ──
 let session = null;
@@ -716,9 +767,20 @@ function switchTab(tab) {
   document.getElementById('tab-login').classList.toggle('active',    tab === 'login');
   document.getElementById('tab-register').classList.toggle('active', tab === 'register');
   if (tab === 'login')    document.getElementById('del-login-form').classList.add('active');
-  if (tab === 'register') document.getElementById('del-register-form').classList.add('active');
+  if (tab === 'register') { populateCommitteeSelects(); document.getElementById('del-register-form').classList.add('active'); }
   if (tab === 'confirm')  document.getElementById('del-confirm-screen').classList.add('active');
   clearLoginErrors();
+}
+
+// Fill every committee <select> in the app with the current committee list.
+function populateCommitteeSelects() {
+  const opts = getCommittees().map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('')
+             || '<option value="">No committees yet</option>';
+  document.querySelectorAll('select.committee-select, #reg-committee').forEach(sel => {
+    const prev = sel.value;
+    sel.innerHTML = opts;
+    if (prev) sel.value = prev;
+  });
 }
 
 function clearLoginErrors() {
@@ -750,7 +812,7 @@ function loginDelegate() {
   const account = getDelegates().find(d => d.email.toLowerCase() === email && d.password === pw);
   if (!account) { errEl.textContent = 'Email or password is incorrect.'; errEl.classList.add('show'); return; }
   errEl.classList.remove('show');
-  session = { role: 'delegate', name: account.delegation, email: account.email };
+  session = { role: 'delegate', name: account.delegation, email: account.email, committee: account.committee };
   persistSession(session);
   startApp();
 }
@@ -760,10 +822,11 @@ function registerDelegate() {
   errEl.classList.remove('show'); errEl.textContent = '';
   try {
     const delegation = document.getElementById('reg-delegation').value.trim();
+    const committee  = document.getElementById('reg-committee').value;
     const email      = document.getElementById('reg-email').value.trim().toLowerCase();
     const pw         = document.getElementById('reg-pw').value;
     const pw2        = document.getElementById('reg-pw2').value;
-    if (!delegation || !email || !pw || !pw2) { errEl.textContent = 'All fields are required.'; errEl.classList.add('show'); return; }
+    if (!delegation || !committee || !email || !pw || !pw2) { errEl.textContent = 'All fields are required (including committee).'; errEl.classList.add('show'); return; }
     if (pw.length < 6)  { errEl.textContent = 'Password must be at least 6 characters.'; errEl.classList.add('show'); return; }
     if (pw !== pw2)     { errEl.textContent = 'Passwords do not match.'; errEl.classList.add('show'); return; }
     const delegates = getDelegates();
@@ -773,7 +836,7 @@ function registerDelegate() {
       document.getElementById('del-login-email').value = email;
       return;
     }
-    const newAccount = { id: uid(), email, password: pw, delegation, createdAt: Date.now() };
+    const newAccount = { id: uid(), email, password: pw, delegation, committee, createdAt: Date.now() };
     delegates.push(newAccount);
     DB.set('delegates', delegates);
     if (!getDelegates().find(d => d.email === email)) {
@@ -817,7 +880,7 @@ function renderHeader() {
   document.getElementById('hdr-sub').textContent  = s.committee ? `${s.committee} — ${s.topic||''}` : 'Koc Okulu MUN';
   document.getElementById('session-badge').innerHTML = isChair()
     ? 'Signed in as <span>Chair</span>'
-    : `<span>${session.name}</span>`;
+    : `<span>${esc(session.name)}</span>${session.committee ? ' · ' + esc(committeeName(session.committee)) : ''}`;
 }
 
 const CHAIR_PAGES    = ['dashboard','resolutions','formatting','amendments','tally'];
@@ -869,9 +932,13 @@ function bgClose(e,id)  { if (e.target.id===id) closeModal(id); }
 function renderDashboard() {
   const ress   = getResolutions();
   const amends = getAmendments();
-  const dels   = getAllTallyNames();
+  const cid    = getActiveCommittee();
+  const dels   = committeeDelegations(cid);
+  const lbEl = document.getElementById('dash-lb-committee');
+  if (lbEl) lbEl.textContent = '· ' + committeeName(cid);
 
   document.getElementById('dash-stats').innerHTML = `
+    <div class="stat-item"><div class="stat-num">${getCommittees().length}</div><div class="stat-label">Committees</div></div>
     <div class="stat-item"><div class="stat-num">${dels.length}</div><div class="stat-label">Delegations</div></div>
     <div class="stat-item"><div class="stat-num">${ress.length}</div><div class="stat-label">Resolutions</div></div>
     <div class="stat-item"><div class="stat-num">${amends.filter(a=>a.status==='submitted').length}</div><div class="stat-label">Pending Amendments</div></div>
@@ -903,7 +970,7 @@ function renderDashboard() {
       </div>`).join('');
   }
 
-  const scores = getScores();
+  const scores = committeeScores(cid);
   let rows = dels.map(d=>{
     const ds=scores[d]||{};
     const pa=avg(ds.poi||[]),sa=avg(ds.speech||[]),ra=avg(ds.resolution||[]);
@@ -1091,24 +1158,71 @@ function deleteAmendment(id) {
 // ── TALLY ──
 let activeDelegateScore = null;
 
+// ── committee management ──
+function renderCommitteeChips() {
+  const cid = getActiveCommittee();
+  const wrap = document.getElementById('committee-chips');
+  if (!wrap) return;
+  const cs = getCommittees();
+  wrap.innerHTML = cs.length
+    ? cs.map(c => `<div class="committee-chip ${c.id===cid?'active':''}" onclick="switchCommittee('${c.id}')">${esc(c.name)}</div>`).join('')
+    : '<span class="text-muted text-sm">No committees yet — add one below</span>';
+  const lbl = document.getElementById('add-del-committee');
+  if (lbl) lbl.textContent = committeeName(cid);
+}
+
+function switchCommittee(id) { setActiveCommittee(id); renderTally(); }
+
+function addCommittee() {
+  const inp = document.getElementById('new-committee');
+  const name = inp.value.trim();
+  if (!name) return;
+  const cs = getCommittees();
+  if (cs.some(c => c.name.toLowerCase() === name.toLowerCase())) { toast('Committee already exists'); inp.value=''; return; }
+  const c = { id: uid(), name };
+  cs.push(c); DB.set('committees', cs);
+  setActiveCommittee(c.id);
+  inp.value = '';
+  populateCommitteeSelects();
+  toast(`Committee added: ${name}`);
+  renderTally();
+}
+
+function removeCommittee() {
+  const cs = getCommittees();
+  if (cs.length <= 1) { toast('Keep at least one committee'); return; }
+  const cid = getActiveCommittee();
+  if (!confirm(`Remove committee "${committeeName(cid)}" and all its tally scores?`)) return;
+  DB.set('committees', cs.filter(c => c.id !== cid));
+  const t = getTally();  delete t[cid];  DB.set('tally', t);
+  const s = getCScores(); delete s[cid]; DB.set('cscores', s);
+  setActiveCommittee((getCommittees()[0]||{}).id || 'gen');
+  populateCommitteeSelects();
+  toast('Committee removed');
+  renderTally();
+}
+
 function addTallyDelegation() {
   const inp  = document.getElementById('new-tally-del');
   const name = inp.value.trim();
   if (!name) return;
-  const all = getAllTallyNames();
-  if (all.map(n=>n.toLowerCase()).includes(name.toLowerCase())) { toast('Already in tally'); inp.value=''; return; }
-  const manual = getTallyDels();
-  manual.push(name);
-  DB.set('tallyDels', manual);
+  const cid = getActiveCommittee();
+  const existing = committeeDelegations(cid);
+  if (existing.map(n=>n.toLowerCase()).includes(name.toLowerCase())) { toast('Already in this committee'); inp.value=''; return; }
+  const t = getTally();
+  t[cid] = [...(t[cid]||[]), name];
+  DB.set('tally', t);
   inp.value = ''; toast(`Added: ${name}`); renderTally();
 }
 
 function renderTally() {
+  renderCommitteeChips();
+  const cid    = getActiveCommittee();
   const search = (document.getElementById('tally-search')||{}).value?.toLowerCase() || '';
   const sortBy = (document.getElementById('tally-sort')||{}).value || 'name';
-  const scores = getScores();
+  const scores = committeeScores(cid);
 
-  let rows = getAllTallyNames()
+  let rows = committeeDelegations(cid)
     .filter(d => d.toLowerCase().includes(search))
     .map(d => {
       const ds = scores[d] || {};
@@ -1143,9 +1257,10 @@ function renderTally() {
 }
 
 function removeTallyRow(name) {
-  if (!confirm(`Remove "${name}" from tally? Scores will be deleted.`)) return;
-  DB.set('tallyDels', getTallyDels().filter(d => d !== name));
-  const scores = getScores(); delete scores[name]; DB.set('scores', scores);
+  if (!confirm(`Remove "${name}" from this committee? Scores will be deleted.`)) return;
+  const cid = getActiveCommittee();
+  const t = getTally(); t[cid] = (t[cid]||[]).filter(d => d !== name); DB.set('tally', t);
+  const s = getCScores(); if (s[cid]) { delete s[cid][name]; DB.set('cscores', s); }
   renderTally(); toast(`${name} removed`);
 }
 
@@ -1161,7 +1276,7 @@ function scoreBar(val) {
 function openScoreEntry(delegation) {
   activeDelegateScore = delegation;
   document.getElementById('score-modal-title').textContent = `Score — ${delegation}`;
-  const ds = (getScores()[delegation]) || { poi:[], speech:[], resolution:[] };
+  const ds = (committeeScores(getActiveCommittee())[delegation]) || { poi:[], speech:[], resolution:[] };
   document.getElementById('score-modal-body').innerHTML = `
     <div class="form-group">
       <label>Category</label>
@@ -1214,28 +1329,32 @@ function saveScoreEntry() {
   const cat = document.getElementById('score-cat').value;
   const val = parseInt(document.getElementById('score-val').value);
   if (!val || val<1 || val>5) { toast('Please select a score (1–5)'); return; }
-  const scores = getScores();
-  if (!scores[activeDelegateScore]) scores[activeDelegateScore] = { poi:[], speech:[], resolution:[] };
-  if (!scores[activeDelegateScore][cat]) scores[activeDelegateScore][cat] = [];
-  scores[activeDelegateScore][cat].push(val);
-  DB.set('scores', scores);
+  const cid = getActiveCommittee();
+  const scores = getCScores();
+  if (!scores[cid]) scores[cid] = {};
+  if (!scores[cid][activeDelegateScore]) scores[cid][activeDelegateScore] = { poi:[], speech:[], resolution:[] };
+  if (!scores[cid][activeDelegateScore][cat]) scores[cid][activeDelegateScore][cat] = [];
+  scores[cid][activeDelegateScore][cat].push(val);
+  DB.set('cscores', scores);
   toast(`Score ${val} saved for ${activeDelegateScore}`);
   closeModal('modal-add-score'); renderTally();
   if (currentPage==='dashboard') renderDashboard();
 }
 
 function exportTally() {
-  const scores = getScores();
-  let csv = 'Delegation,POI Entries,POI Avg,Speech Entries,Speech Avg,Res Entries,Res Avg,Total Avg\n';
-  getAllTallyNames().forEach(d => {
+  const cid = getActiveCommittee();
+  const scores = committeeScores(cid);
+  let csv = 'Committee,Delegation,POI Entries,POI Avg,Speech Entries,Speech Avg,Res Entries,Res Avg,Total Avg\n';
+  const cname = committeeName(cid);
+  committeeDelegations(cid).forEach(d => {
     const ds = scores[d]||{};
     const poi=ds.poi||[], sp=ds.speech||[], re=ds.resolution||[];
     const pa=avg(poi), sa=avg(sp), ra=avg(re), ta=avg([pa,sa,ra].filter(x=>x>0));
-    csv += `"${d}","${poi.join(',')}",${pa.toFixed(2)},"${sp.join(',')}",${sa.toFixed(2)},"${re.join(',')}",${ra.toFixed(2)},${ta.toFixed(2)}\n`;
+    csv += `"${cname}","${d}","${poi.join(',')}",${pa.toFixed(2)},"${sp.join(',')}",${sa.toFixed(2)},"${re.join(',')}",${ra.toFixed(2)},${ta.toFixed(2)}\n`;
   });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-  a.download = 'mundp-tally.csv'; a.click();
+  a.download = `mundp-tally-${cname.replace(/[^a-z0-9]+/gi,'-').toLowerCase()}.csv`; a.click();
 }
 
 // ── FORMATTING ──
@@ -1405,11 +1524,29 @@ function handleFmtFile(ev) {
       .then(readDocxXml)
       .then(xml => done(parseDocxParagraphs(xml)))
       .catch(e => { console.error(e); toast('Could not read this .docx — try pasting the text instead'); });
+  } else if (/\.(doc|pdf|pages|rtf|odt|key)$/i.test(name)) {
+    // binary document formats can't be read as text in the browser
+    toast('Save this as .docx or .txt, or paste the text below');
   } else {
     file.text()
-      .then(txt => done(txt.split(/\r?\n/).map(t => ({ text:t }))))
+      .then(txt => {
+        if (fmtLooksBinary(txt)) { toast('This file isn’t plain text — save as .docx/.txt or paste the text'); return; }
+        done(txt.split(/\r?\n/).map(t => ({ text:t })));
+      })
       .catch(() => toast('Could not read this file'));
   }
+}
+
+// rough heuristic: non-text files have many control/null bytes
+function fmtLooksBinary(s) {
+  const sample = s.slice(0, 2000);
+  if (!sample.length) return false;
+  let bad = 0;
+  for (let i = 0; i < sample.length; i++) {
+    const c = sample.charCodeAt(i);
+    if (c === 0 || c < 9 || (c > 13 && c < 32)) bad++;
+  }
+  return bad / sample.length > 0.05;
 }
 
 // Minimal .docx reader: locate word/document.xml in the zip and inflate it (deflate-raw).
@@ -1461,10 +1598,20 @@ function parseDocxParagraphs(xml) {
 
 // ── BOOT ──
 seed();
+populateCommitteeSelects();
 const _saved = DB.get('session');
 if (_saved && _saved.role === 'chair') {
   session = _saved;
   startApp();
+} else if (_saved && _saved.role === 'delegate') {
+  // resume a saved delegate session only if the account still exists
+  const acc = getDelegates().find(d => d.email === _saved.email);
+  if (acc) {
+    session = { role:'delegate', name: acc.delegation, email: acc.email, committee: acc.committee };
+    startApp();
+  } else {
+    persistSession(null);
+  }
 }
 </script>
 </body>
