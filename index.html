@@ -669,6 +669,18 @@
   </div>
 </div>
 
+<div class="overlay" id="modal-pick-committee">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:460px;">
+    <div class="modal-title">Choose your committee</div>
+    <p class="text-muted text-sm" style="margin-top:-.75rem;margin-bottom:1.1rem;">Pick the committee you're chairing. You can switch or add more later on the Tally page.</p>
+    <div id="pick-committee-list" style="display:flex;flex-direction:column;gap:.45rem;margin-bottom:1.1rem;"></div>
+    <div style="display:flex;gap:.5rem;border-top:1px solid var(--line);padding-top:1rem;">
+      <input id="pick-new-committee" placeholder="Or add a new committee…" onkeydown="if(event.key==='Enter')addCommitteeFromPicker()" />
+      <button class="btn btn-primary btn-sm" style="flex-shrink:0;" onclick="addCommitteeFromPicker()">Add</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
 <script>
@@ -695,11 +707,13 @@ function seed() {
   if (DB.get('delegates')   === null) DB.set('delegates',   []);
   if (DB.get('resolutions') === null) DB.set('resolutions', []);
   if (DB.get('amendments')  === null) DB.set('amendments',  []);
-  if (DB.get('settings')    === null) DB.set('settings',    { name:'MUNDP 2026', committee:'General Assembly', topic:'Sustainable Development' });
+  if (DB.get('settings')    === null) DB.set('settings',    { name:'MUNDP 2026', committee:'General Assembly', topic:'Commitment to Development' });
   if (DB.get('committees')  === null) DB.set('committees',  [{ id:'gen', name:'General Assembly' }]);
   if (DB.get('tally')       === null) DB.set('tally',       {});   // { [committeeId]: [delegationName] }
   if (DB.get('cscores')     === null) DB.set('cscores',     {});   // { [committeeId]: { [delegationName]: {poi,speech,resolution} } }
   if (DB.get('activeCommittee') === null) DB.set('activeCommittee', (getCommittees()[0] || {}).id || 'gen');
+  const _s = getSettings();
+  if (_s.topic === 'Sustainable Development') { _s.topic = 'Commitment to Development'; DB.set('settings', _s); }
   migrateFlatTally();
 }
 
@@ -802,6 +816,38 @@ function loginChair() {
   session = { role: 'chair' };
   persistSession(session);
   startApp();
+  openCommitteePicker();   // chair chooses the committee before doing anything
+}
+
+// ── CHAIR COMMITTEE PICKER (shown right after chair sign-in) ──
+function openCommitteePicker() {
+  const active = getActiveCommittee();
+  document.getElementById('pick-committee-list').innerHTML = getCommittees().map(c =>
+    `<button class="btn ${c.id===active?'btn-primary':'btn-ghost'}" style="width:100%;justify-content:space-between;padding:.7rem 1rem;font-size:.92rem;"
+       onclick="pickCommittee('${c.id}')">${esc(c.name)}${c.id===active?' ✓':''}</button>`
+  ).join('') || '<div class="text-muted text-sm">No committees yet — add one below.</div>';
+  document.getElementById('modal-pick-committee').classList.add('open');
+}
+
+function pickCommittee(id) {
+  setActiveCommittee(id);
+  closeModal('modal-pick-committee');
+  renderHeader();
+  goto('dashboard');
+  toast('Committee: ' + committeeName(id));
+}
+
+function addCommitteeFromPicker() {
+  const inp = document.getElementById('pick-new-committee');
+  const name = inp.value.trim();
+  if (!name) return;
+  const cs = getCommittees();
+  if (cs.some(c => c.name.toLowerCase() === name.toLowerCase())) { toast('Committee already exists'); return; }
+  const c = { id: uid(), name };
+  cs.push(c); DB.set('committees', cs);
+  populateCommitteeSelects();
+  inp.value = '';
+  pickCommittee(c.id);
 }
 
 function loginDelegate() {
@@ -877,7 +923,8 @@ function logout() {
 function renderHeader() {
   const s = getSettings();
   document.getElementById('hdr-name').textContent = s.name || 'MUNDP';
-  document.getElementById('hdr-sub').textContent  = s.committee ? `${s.committee} — ${s.topic||''}` : 'Koc Okulu MUN';
+  const cn = isChair() ? committeeName(getActiveCommittee()) : (session?.committee ? committeeName(session.committee) : (s.committee||''));
+  document.getElementById('hdr-sub').textContent  = cn ? `${cn} — ${s.topic||'Commitment to Development'}` : 'Koc Okulu MUN';
   document.getElementById('session-badge').innerHTML = isChair()
     ? 'Signed in as <span>Chair</span>'
     : `<span>${esc(session.name)}</span>${session.committee ? ' · ' + esc(committeeName(session.committee)) : ''}`;
