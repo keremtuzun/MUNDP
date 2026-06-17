@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MUNDP — Digital Platform</title>
+  <title>MUNDP - Digital Platform</title>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -77,7 +77,7 @@
 
     .step-label { font-family: var(--sans); font-size: .68rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .85rem; }
 
-    /* role picker — segmented control, not cards */
+    /* role picker - segmented control, not cards */
     .role-picker { display: flex; border: 1px solid var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 2rem; }
     .role-card { flex: 1; padding: .9rem 1rem; text-align: center; cursor: pointer; background: #FAFAF8; transition: background .18s; user-select: none; }
     .role-card + .role-card { border-left: 1px solid var(--border); }
@@ -149,7 +149,7 @@
     .page-header { margin-bottom: 2rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--line); display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
     .page-header-left { flex: 1; }
 
-    /* stat row — no boxing, just numbers in a row */
+    /* stat row - no boxing, just numbers in a row */
     .stat-row { display: flex; gap: 0; margin-bottom: 2.5rem; border: 1px solid var(--line); border-radius: 3px; background: #fff; overflow: hidden; }
     .stat-item { flex: 1; padding: 1.5rem 1.25rem; text-align: center; border-right: 1px solid var(--line); }
     .stat-item:last-child { border-right: none; }
@@ -161,16 +161,16 @@
     .col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-bottom: 2.5rem; }
     @media(max-width:700px) { .col-2 { grid-template-columns: 1fr; } }
 
-    /* section block — minimal container */
+    /* section block - minimal container */
     .section { background: #fff; border: 1px solid var(--line); border-radius: 3px; padding: 1.35rem 1.5rem; }
     .section + .section { margin-top: 1rem; }
 
-    /* card — for inline items (recent resolutions, amendments in dashboard) */
+    /* card - for inline items (recent resolutions, amendments in dashboard) */
     .item-row { padding: .75rem 0; border-bottom: 1px solid var(--line); }
     .item-row:last-child { border-bottom: none; padding-bottom: 0; }
     .item-row:first-child { padding-top: 0; }
 
-    /* badges — restrained */
+    /* badges - restrained */
     .badge { display: inline-block; font-family: var(--sans); font-size: .66rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: .14rem .48rem; border-radius: 2px; }
     .badge-pending  { background: #EEF2FF; color: #3730A3; }
     .badge-passed   { background: #ECFDF5; color: var(--green); }
@@ -478,7 +478,7 @@
       </div>
 
       <div class="info-banner blue">
-        Upload a <strong>.docx</strong> or <strong>.txt</strong> file — or paste the text below — and the
+        Upload a <strong>.docx</strong> or <strong>.txt</strong> file - or paste the text below - and the
         formatted copy downloads to your <strong>Downloads</strong> folder automatically. Clause numbering
         (<strong>1.</strong> &rarr; <strong>a.</strong> &rarr; <strong>i.</strong>) and indentation are
         corrected to the standard format, each operative clause is closed with a <strong>;</strong> and the
@@ -492,7 +492,7 @@
           <input type="file" id="fmt-file" onchange="handleFmtFile(event)" />
           <div class="text-muted text-sm" style="margin-top:.35rem;">Best with <strong>.docx</strong> or <strong>.txt</strong>. If your file (e.g. .doc, .pdf, Google Doc) won't format cleanly, paste the text below instead.</div>
         </div>
-        <div style="text-align:center;color:var(--muted);font-family:var(--sans);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;margin:.5rem 0;">— or paste the text —</div>
+        <div style="text-align:center;color:var(--muted);font-family:var(--sans);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;margin:.5rem 0;">- or paste the text -</div>
         <div class="form-group">
           <label>Resolution Text</label>
           <textarea id="fmt-text" rows="10" placeholder="Paste the full resolution here…"></textarea>
@@ -541,12 +541,12 @@
       <div class="page-header">
         <div class="page-header-left">
           <h1>Delegate Tally</h1>
-          <p class="subtitle">Scores are tracked per committee (1–5) — pick a committee below</p>
+          <p class="subtitle">Scores are tracked per committee (1–5) - pick a committee below</p>
         </div>
         <button class="btn btn-ghost btn-sm" onclick="exportTally()">Export CSV</button>
       </div>
 
-      <!-- committee selector — always visible -->
+      <!-- committee selector - always visible -->
       <div class="section mb-2" style="margin-bottom:1rem;">
         <div class="committee-label" style="margin-bottom:.55rem;">Committee</div>
         <div id="committee-chips" class="committee-bar" style="margin-bottom:.85rem;"></div>
@@ -609,7 +609,7 @@
     <div class="modal-title">Add Resolution</div>
     <div class="form-group">
       <label>Resolution Title</label>
-      <input id="res-title-inp" placeholder="e.g. DR 1.1 — Climate Action Framework" />
+      <input id="res-title-inp" placeholder="e.g. DR 1.1 - Climate Action Framework" />
     </div>
     <div class="form-group">
       <label>Submitted By</label>
@@ -669,7 +669,7 @@
   </div>
 </div>
 
-<div class="overlay" id="modal-pick-committee">
+<div class="overlay" id="modal-pick-committee" onclick="bgClose(event,'modal-pick-committee')">
   <div class="modal" onclick="event.stopPropagation()" style="max-width:460px;">
     <div class="modal-title">Choose your committee</div>
     <p class="text-muted text-sm" style="margin-top:-.75rem;margin-bottom:1.1rem;">Pick the committee you're chairing. You can switch or add more later on the Tally page.</p>
@@ -677,6 +677,9 @@
     <div style="display:flex;gap:.5rem;border-top:1px solid var(--line);padding-top:1rem;">
       <input id="pick-new-committee" placeholder="Or add a new committee…" onkeydown="if(event.key==='Enter')addCommitteeFromPicker()" />
       <button class="btn btn-primary btn-sm" style="flex-shrink:0;" onclick="addCommitteeFromPicker()">Add</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-pick-committee')">Continue</button>
     </div>
   </div>
 </div>
@@ -743,7 +746,7 @@ const getTally           = () => DB.get('tally')      || {};
 const getCScores         = () => DB.get('cscores')    || {};
 const getActiveCommittee = () => DB.get('activeCommittee') || ((getCommittees()[0]||{}).id) || 'gen';
 function setActiveCommittee(id) { DB.set('activeCommittee', id); }
-function committeeName(id) { const c = getCommittees().find(c => c.id === id); return c ? c.name : '—'; }
+function committeeName(id) { const c = getCommittees().find(c => c.id === id); return c ? c.name : '-'; }
 
 // Delegations in a committee = manually-added names + registered delegate accounts assigned to it.
 function committeeDelegations(cid) {
@@ -825,7 +828,7 @@ function openCommitteePicker() {
   document.getElementById('pick-committee-list').innerHTML = getCommittees().map(c =>
     `<button class="btn ${c.id===active?'btn-primary':'btn-ghost'}" style="width:100%;justify-content:space-between;padding:.7rem 1rem;font-size:.92rem;"
        onclick="pickCommittee('${c.id}')">${esc(c.name)}${c.id===active?' ✓':''}</button>`
-  ).join('') || '<div class="text-muted text-sm">No committees yet — add one below.</div>';
+  ).join('') || '<div class="text-muted text-sm">No committees yet - add one below.</div>';
   document.getElementById('modal-pick-committee').classList.add('open');
 }
 
@@ -877,7 +880,7 @@ function registerDelegate() {
     if (pw !== pw2)     { errEl.textContent = 'Passwords do not match.'; errEl.classList.add('show'); return; }
     const delegates = getDelegates();
     if (delegates.find(d => d.email.toLowerCase() === email)) {
-      errEl.textContent = 'This email is already registered — try signing in instead.';
+      errEl.textContent = 'This email is already registered - try signing in instead.';
       errEl.classList.add('show');
       document.getElementById('del-login-email').value = email;
       return;
@@ -909,6 +912,7 @@ function startApp() {
 function logout() {
   session = null; selectedRole = null;
   persistSession(null);
+  document.querySelectorAll('.overlay').forEach(o => o.classList.remove('open'));  // never leave a modal covering the login screen
   document.getElementById('login-screen').style.display = 'flex';
   document.getElementById('app').style.display = 'none';
   ['chair-code','del-login-email','del-login-pw'].forEach(id => document.getElementById(id).value = '');
@@ -924,7 +928,7 @@ function renderHeader() {
   const s = getSettings();
   document.getElementById('hdr-name').textContent = s.name || 'MUNDP';
   const cn = isChair() ? committeeName(getActiveCommittee()) : (session?.committee ? committeeName(session.committee) : (s.committee||''));
-  document.getElementById('hdr-sub').textContent  = cn ? `${cn} — ${s.topic||'Commitment to Development'}` : 'Koc Okulu MUN';
+  document.getElementById('hdr-sub').textContent  = cn ? `${cn} - ${s.topic||'Commitment to Development'}` : 'Koc Okulu MUN';
   document.getElementById('session-badge').innerHTML = isChair()
     ? 'Signed in as <span>Chair</span>'
     : `<span>${esc(session.name)}</span>${session.committee ? ' · ' + esc(committeeName(session.committee)) : ''}`;
@@ -1028,10 +1032,10 @@ function renderDashboard() {
     ? rows.map((r,i)=>`<tr>
         <td class="${i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':''}">${['1st','2nd','3rd'][i]||'#'+(i+1)}</td>
         <td>${r.d}</td>
-        <td style="text-align:center;">${r.pa?r.pa.toFixed(2):'—'}</td>
-        <td style="text-align:center;">${r.sa?r.sa.toFixed(2):'—'}</td>
-        <td style="text-align:center;">${r.ra?r.ra.toFixed(2):'—'}</td>
-        <td style="text-align:center;color:var(--gold);font-weight:700;">${r.ta?r.ta.toFixed(2):'—'}</td>
+        <td style="text-align:center;">${r.pa?r.pa.toFixed(2):'-'}</td>
+        <td style="text-align:center;">${r.sa?r.sa.toFixed(2):'-'}</td>
+        <td style="text-align:center;">${r.ra?r.ra.toFixed(2):'-'}</td>
+        <td style="text-align:center;color:var(--gold);font-weight:700;">${r.ta?r.ta.toFixed(2):'-'}</td>
       </tr>`).join('')
     : '<tr><td colspan="6" class="empty">No score data yet</td></tr>';
 }
@@ -1213,7 +1217,7 @@ function renderCommitteeChips() {
   const cs = getCommittees();
   wrap.innerHTML = cs.length
     ? cs.map(c => `<div class="committee-chip ${c.id===cid?'active':''}" onclick="switchCommittee('${c.id}')">${esc(c.name)}</div>`).join('')
-    : '<span class="text-muted text-sm">No committees yet — add one below</span>';
+    : '<span class="text-muted text-sm">No committees yet - add one below</span>';
   const lbl = document.getElementById('add-del-committee');
   if (lbl) lbl.textContent = committeeName(cid);
 }
@@ -1284,18 +1288,18 @@ function renderTally() {
   else rows.sort((a,b)=>a.d.localeCompare(b.d));
 
   const tbody = document.getElementById('tally-body');
-  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="10" class="empty">No delegations yet — add one above</td></tr>'; return; }
+  if (!rows.length) { tbody.innerHTML = '<tr><td colspan="10" class="empty">No delegations yet - add one above</td></tr>'; return; }
 
   tbody.innerHTML = rows.map((r,i)=>`<tr>
     <td style="color:var(--muted);font-family:var(--sans);font-size:.78rem;">${i+1}</td>
     <td><strong style="font-family:var(--serif);font-weight:normal;">${r.d}</strong></td>
-    <td style="text-align:center;"><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;max-width:130px;">${r.poi.map(s=>`<span class="tag">${s}</span>`).join('')||'<span class="text-muted text-sm">—</span>'}</div></td>
-    <td style="text-align:center;">${r.pa ? scoreBar(r.pa) : '—'}</td>
-    <td style="text-align:center;"><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;max-width:130px;">${r.speech.map(s=>`<span class="tag">${s}</span>`).join('')||'<span class="text-muted text-sm">—</span>'}</div></td>
-    <td style="text-align:center;">${r.sa ? scoreBar(r.sa) : '—'}</td>
-    <td style="text-align:center;"><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;max-width:130px;">${r.res.map(s=>`<span class="tag">${s}</span>`).join('')||'<span class="text-muted text-sm">—</span>'}</div></td>
-    <td style="text-align:center;">${r.ra ? scoreBar(r.ra) : '—'}</td>
-    <td style="text-align:center;font-family:var(--sans);color:var(--gold);font-weight:700;font-size:.95rem;">${r.ta ? r.ta.toFixed(2) : '—'}</td>
+    <td style="text-align:center;"><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;max-width:130px;">${r.poi.map(s=>`<span class="tag">${s}</span>`).join('')||'<span class="text-muted text-sm">-</span>'}</div></td>
+    <td style="text-align:center;">${r.pa ? scoreBar(r.pa) : '-'}</td>
+    <td style="text-align:center;"><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;max-width:130px;">${r.speech.map(s=>`<span class="tag">${s}</span>`).join('')||'<span class="text-muted text-sm">-</span>'}</div></td>
+    <td style="text-align:center;">${r.sa ? scoreBar(r.sa) : '-'}</td>
+    <td style="text-align:center;"><div style="display:flex;gap:2px;justify-content:center;flex-wrap:wrap;max-width:130px;">${r.res.map(s=>`<span class="tag">${s}</span>`).join('')||'<span class="text-muted text-sm">-</span>'}</div></td>
+    <td style="text-align:center;">${r.ra ? scoreBar(r.ra) : '-'}</td>
+    <td style="text-align:center;font-family:var(--sans);color:var(--gold);font-weight:700;font-size:.95rem;">${r.ta ? r.ta.toFixed(2) : '-'}</td>
     <td style="text-align:center;white-space:nowrap;">
       <button class="btn btn-primary btn-sm" onclick="openScoreEntry('${r.d.replace(/'/g,"\\'")}')">+ Score</button>
       <button class="btn btn-ghost btn-sm" style="margin-left:.25rem;" onclick="removeTallyRow('${r.d.replace(/'/g,"\\'")}')">&#10005;</button>
@@ -1322,7 +1326,7 @@ function scoreBar(val) {
 
 function openScoreEntry(delegation) {
   activeDelegateScore = delegation;
-  document.getElementById('score-modal-title').textContent = `Score — ${delegation}`;
+  document.getElementById('score-modal-title').textContent = `Score - ${delegation}`;
   const ds = (committeeScores(getActiveCommittee())[delegation]) || { poi:[], speech:[], resolution:[] };
   document.getElementById('score-modal-body').innerHTML = `
     <div class="form-group">
@@ -1352,7 +1356,7 @@ function openScoreEntry(delegation) {
       <input id="score-note" placeholder="Brief remark…" />
     </div>
     <hr style="border:none;border-top:1px solid var(--line);margin:1rem 0;" />
-    <div style="font-family:var(--sans);font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:.5rem;">Previous Scores — ${delegation}</div>
+    <div style="font-family:var(--sans);font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:.5rem;">Previous Scores - ${delegation}</div>
     ${['poi','speech','resolution'].map(cat => {
       const arr = ds[cat] || [];
       return arr.length ? `<div style="margin-bottom:.4rem;font-family:var(--sans);"><strong style="font-size:.76rem;">${cat.toUpperCase()}:</strong> ${arr.map(s=>`<span class="tag">${s}</span>`).join(' ')} <span class="text-muted text-sm">avg ${avg(arr).toFixed(2)}</span></div>` : '';
@@ -1441,7 +1445,7 @@ function fmtClassifyLevel(token, st) {
   return 2;
 }
 
-// rawLines: [{ text, ilvl? }]  — ilvl (Word numbering level) wins over marker detection when present
+// rawLines: [{ text, ilvl? }]  - ilvl (Word numbering level) wins over marker detection when present
 function fmtBuildItems(rawLines) {
   const items = [];
   let n1=0, n2=0, n3=0, depth=0;
@@ -1570,14 +1574,14 @@ function handleFmtFile(ev) {
     file.arrayBuffer()
       .then(readDocxXml)
       .then(xml => done(parseDocxParagraphs(xml)))
-      .catch(e => { console.error(e); toast('Could not read this .docx — try pasting the text instead'); });
+      .catch(e => { console.error(e); toast('Could not read this .docx - try pasting the text instead'); });
   } else if (/\.(doc|pdf|pages|rtf|odt|key)$/i.test(name)) {
     // binary document formats can't be read as text in the browser
     toast('Save this as .docx or .txt, or paste the text below');
   } else {
     file.text()
       .then(txt => {
-        if (fmtLooksBinary(txt)) { toast('This file isn’t plain text — save as .docx/.txt or paste the text'); return; }
+        if (fmtLooksBinary(txt)) { toast('This file isn’t plain text - save as .docx/.txt or paste the text'); return; }
         done(txt.split(/\r?\n/).map(t => ({ text:t })));
       })
       .catch(() => toast('Could not read this file'));
